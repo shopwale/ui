@@ -1,8 +1,0 @@
-{
-  "asset": "asset:vendor/lib/types/lib/inject.dart",
-  "summary": {
-    "injector": [],
-    "module": [],
-    "injectable": []
-  }
-}

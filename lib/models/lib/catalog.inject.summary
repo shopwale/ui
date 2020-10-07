@@ -1,8 +1,0 @@
-{
-  "asset": "asset:vendor/lib/models/lib/catalog.dart",
-  "summary": {
-    "injector": [],
-    "module": [],
-    "injectable": []
-  }
-}
