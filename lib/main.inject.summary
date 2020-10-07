@@ -1,0 +1,57 @@
+{
+  "asset": "asset:vendor/lib/main.dart",
+  "summary": {
+    "injector": [
+      {
+        "name": "ProdInjector",
+        "providers": [
+          {
+            "name": "app",
+            "kind": "getter",
+            "injectedType": {
+              "lookupKey": {
+                "root": "asset:vendor/lib/main.dart#VendorApp",
+                "qualifier": null
+              },
+              "isProvider": false
+            },
+            "singleton": false,
+            "asynchronous": false,
+            "dependencies": []
+          }
+        ],
+        "modules": [
+          "asset:vendor/lib/services/lib/module.dart#DevServices"
+        ]
+      }
+    ],
+    "module": [],
+    "injectable": [
+      {
+        "name": "VendorApp",
+        "constructor": {
+          "name": "",
+          "kind": "constructor",
+          "injectedType": {
+            "lookupKey": {
+              "root": "asset:vendor/lib/main.dart#VendorApp",
+              "qualifier": null
+            },
+            "isProvider": false
+          },
+          "singleton": false,
+          "asynchronous": false,
+          "dependencies": [
+            {
+              "lookupKey": {
+                "root": "asset:vendor/lib/widgets/lib/login.dart#Login",
+                "qualifier": null
+              },
+              "isProvider": true
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

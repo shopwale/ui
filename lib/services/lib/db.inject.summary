@@ -1,0 +1,8 @@
+{
+  "asset": "asset:vendor/lib/services/lib/db.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": []
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "asset": "asset:vendor/lib/widgets/lib/login.dart",
+  "summary": {
+    "injector": [],
+    "module": [],
+    "injectable": [
+      {
+        "name": "Login",
+        "constructor": {
+          "name": "",
+          "kind": "constructor",
+          "injectedType": {
+            "lookupKey": {
+              "root": "asset:vendor/lib/widgets/lib/login.dart#Login",
+              "qualifier": null
+            },
+            "isProvider": false
+          },
+          "singleton": false,
+          "asynchronous": false,
+          "dependencies": [
+            {
+              "lookupKey": {
+                "root": "asset:vendor/lib/widgets/lib/login.dart#LoginState",
+                "qualifier": null
+              },
+              "isProvider": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "LoginState",
+        "constructor": {
+          "name": "",
+          "kind": "constructor",
+          "injectedType": {
+            "lookupKey": {
+              "root": "asset:vendor/lib/widgets/lib/login.dart#LoginState",
+              "qualifier": null
+            },
+            "isProvider": false
+          },
+          "singleton": false,
+          "asynchronous": false,
+          "dependencies": [
+            {
+              "lookupKey": {
+                "root": "asset:vendor/lib/services/lib/provider.dart#ProviderService",
+                "qualifier": null
+              },
+              "isProvider": false
+            },
+            {
+              "lookupKey": {
+                "root": "asset:vendor/lib/services/lib/order.dart#OrderService",
+                "qualifier": null
+              },
+              "isProvider": false
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
