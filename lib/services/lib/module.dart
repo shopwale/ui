@@ -1,4 +1,5 @@
 import 'package:inject/inject.dart';
+import 'package:vendor/services/lib/catalog.dart';
 import 'package:vendor/services/lib/order.dart';
 import 'package:vendor/services/lib/provider.dart';
 
@@ -13,6 +14,9 @@ class Services {
   OrderService provideOrderService() {
     throw UnimplementedError();
   }
+
+  @provide
+  CatalogService provideCatalogService() => CatalogService();
 }
 
 @module
@@ -24,4 +28,8 @@ class DevServices implements Services {
   @override
   @provide
   OrderService provideOrderService() => FakeOrderService();
+
+  @override
+  @provide
+  CatalogService provideCatalogService() => FakeCatalogService();
 }

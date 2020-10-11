@@ -2,47 +2,47 @@ import 'package:flutter/foundation.dart';
 import 'package:vendor/models/lib/catalog.dart';
 
 class Order {
-  final List<ItemOrder> itemOrders;
-  final int serviceProviderId;
   final int orderId;
-  int customerId;
+  final int customerId;
+  final DateTime orderDate;
+  final double totalPrice;
+  final String orderStatus;
+  final bool isDelivery;
 
   Order({
-    this.orderId,
-    this.serviceProviderId,
-    this.customerId,
-    this.itemOrders,
+    @required this.orderId,
+    @required this.customerId,
+    @required this.orderDate,
+    @required this.totalPrice,
+    @required this.orderStatus,
+    @required this.isDelivery,
   });
+
+  Order.fromJson(Map<String, dynamic> json)
+      : this(
+          customerId: json['customerId'],
+          orderId: json['orderId'],
+          orderDate: DateTime.parse(json['orderDate']),
+          orderStatus: json['orderStatus'],
+          isDelivery: json['isDeliver'] == "true",
+          totalPrice: json['totalPrice'],
+        );
 }
 
 class ItemOrder {
-  int _quantity;
-  CatalogItem item;
+  final int quantity;
+  final CatalogItem item;
+  final double subTotalPrice;
 
   ItemOrder({
     @required this.item,
-    int quantity,
-  }) : _quantity = quantity ?? 0;
-
-  int get quantity => _quantity;
-
-  double get subTotalPrice => _quantity * item.price;
+    @required this.quantity,
+    @required this.subTotalPrice,
+  });
 
   Map<String, dynamic> toMap() => {
         'itemId': item.id,
         'quantity': quantity,
         'subTotalPrice': subTotalPrice,
       };
-}
-
-class OrderStatus {
-  final int orderId;
-  final String status;
-
-  OrderStatus({@required this.orderId, @required this.status});
-
-  static OrderStatus fromJson(Map<String, dynamic> json) => OrderStatus(
-        orderId: json['orderId'],
-        status: json['orderStatus'],
-      );
 }

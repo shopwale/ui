@@ -2,11 +2,18 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class DbClient {
-  static final _serverAddress = 'localshopwala.com:3000';
+  static final _serverHost = 'localshopwala.com';
   final Uri _serviceEndpoint;
 
-  DbClient(String servicePath)
-      : _serviceEndpoint = Uri.http(_serverAddress, servicePath);
+  DbClient(
+    String servicePath, {
+    serverPort = 3000,
+  }) : _serviceEndpoint = Uri(
+          scheme: 'http',
+          host: _serverHost,
+          port: serverPort,
+          path: servicePath,
+        );
 
   Future<dynamic> get({Map<String, dynamic> queryParams}) async {
     final requestUri = _serviceEndpoint.replace(queryParameters: queryParams);
@@ -22,8 +29,7 @@ class DbClient {
     Map<String, dynamic> queryParams = const {},
     dynamic body,
   }) async {
-    final requestUri =
-        _serviceEndpoint; //.replace(queryParameters: queryParams);
+    final requestUri = _serviceEndpoint;
     final response = await http.post(
       requestUri,
       body: json.encode(body),

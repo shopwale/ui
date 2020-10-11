@@ -3,6 +3,8 @@ import 'package:vendor/models/lib/order.dart';
 
 abstract class OrderService {
   Future<List<Order>> getOrders(int serviceProviderId);
+
+  Future<List<ItemOrder>> getOrderDetails(int orderId);
 }
 
 class FakeOrderService implements OrderService {
@@ -11,24 +13,25 @@ class FakeOrderService implements OrderService {
       Future.value(List.generate(20, (index) => createFakeOrder(index)));
 
   Order createFakeOrder(int orderId) => Order(
-        serviceProviderId: 1,
         customerId: 1,
         orderId: orderId,
-        itemOrders: [
+        orderDate: DateTime.now(),
+        orderStatus: 'Pending',
+        isDelivery: orderId % 3 == 0,
+        totalPrice: orderId * 35.5 + 10,
+      );
+
+  @override
+  Future<List<ItemOrder>> getOrderDetails(int orderId) => Future.value(
+        [
           ItemOrder(
-              item: CatalogItem(
-                id: 1,
-                name: 'Onion',
-                unitOfMeasure: Unit.kg,
-              ),
-              quantity: 1),
-          ItemOrder(
-              item: CatalogItem(
-                id: 2,
-                name: 'Tomato',
-                unitOfMeasure: Unit.kg,
-              ),
-              quantity: 3)
+            item: CatalogItem(
+              name: 'Onion',
+              id: 1,
+            ),
+            quantity: 2,
+            subTotalPrice: 20.0,
+          )
         ],
       );
 }
