@@ -20,9 +20,14 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   final ProviderService providerService;
   final OrderService orderService;
+  final CurrentOrdersFactory currentOrdersFactory;
   int mobileNumber;
 
-  LoginState(this.providerService, this.orderService);
+  LoginState(
+    this.providerService,
+    this.orderService,
+    this.currentOrdersFactory,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +70,7 @@ class LoginState extends State<Login> {
 
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => CurrentOrders(
-                              orderService,
+                            builder: (_) => currentOrdersFactory.create(
                               orders: orders,
                             ),
                           ),

@@ -37,6 +37,8 @@ dependencies:
       path: package/inject
       ref: 7c3cbf6
 
+  intl:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

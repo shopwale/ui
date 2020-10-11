@@ -8,6 +8,7 @@ class Order {
   final double totalPrice;
   final String orderStatus;
   final bool isDelivery;
+  final String customerName;
 
   Order({
     @required this.orderId,
@@ -16,6 +17,7 @@ class Order {
     @required this.totalPrice,
     @required this.orderStatus,
     @required this.isDelivery,
+    @required this.customerName,
   });
 
   Order.fromJson(Map<String, dynamic> json)
@@ -26,6 +28,7 @@ class Order {
           orderStatus: json['orderStatus'],
           isDelivery: json['isDeliver'] == "true",
           totalPrice: json['totalPrice'],
+          customerName: json['customerName'],
         );
 }
 
