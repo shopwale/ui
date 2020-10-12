@@ -32,7 +32,10 @@ class CurrentOrdersState extends State<CurrentOrders> {
   final OrderService orderService;
   bool showDeliveryOrders = false;
   bool showPickupOrders = false;
-  Set<String> statusesToFilter = {'pending', 'accepted'};
+  Set<OrderStatus> statusesToFilter = {
+    OrderStatus.pending,
+    OrderStatus.accepted,
+  };
   List<Order> visibleOrders = [];
 
   CurrentOrdersState(this.orderService);
@@ -93,7 +96,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
                                     .withOpacity(0.5),
                           ),
                           title: Text('${o.customerName}'),
-                          subtitle: Text('${o.orderStatus.toLowerCase()}'),
+                          subtitle: Text('${o.orderStatus.asString()}'),
                           trailing: Text('$rupeeSymbol ${o.totalPrice}'),
                         ),
                       ],
@@ -119,28 +122,28 @@ class CurrentOrdersState extends State<CurrentOrders> {
           ),
           ChoiceChip(
             label: Text('all'),
-            selected: statusesToFilter.length == 0,
+            selected: statusesToFilter.isEmpty,
             onSelected: (selected) {
               if (selected) {
                 setState(() {
-                  statusesToFilter = {};
+                  statusesToFilter = <OrderStatus>{};
                   _updateVisibleOrders();
                 });
               }
             },
           ),
-          _buildStatusFilter('pending'),
-          _buildStatusFilter('declined'),
-          _buildStatusFilter('accepted'),
-          _buildStatusFilter('completed'),
+          _buildStatusFilter(OrderStatus.pending),
+          _buildStatusFilter(OrderStatus.rejected),
+          _buildStatusFilter(OrderStatus.accepted),
+          _buildStatusFilter(OrderStatus.completed),
         ],
       ),
     );
   }
 
-  ChoiceChip _buildStatusFilter(String status) {
+  ChoiceChip _buildStatusFilter(OrderStatus status) {
     return ChoiceChip(
-      label: Text(status),
+      label: Text(status.asString()),
       selected: statusesToFilter.contains(status),
       onSelected: (selected) {
         setState(() {
@@ -223,8 +226,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
     }
 
     if (statusesToFilter.isNotEmpty) {
-      predicate = predicate &&
-          statusesToFilter.contains(order.orderStatus.toLowerCase());
+      predicate = predicate && statusesToFilter.contains(order.orderStatus);
     }
 
     return predicate;

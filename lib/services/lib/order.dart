@@ -16,12 +16,7 @@ class FakeOrderService implements OrderService {
         customerId: 1,
         orderId: orderId,
         orderDate: DateTime.now(),
-        orderStatus: [
-          'Pending',
-          'Accepted',
-          'Declined',
-          'Completed'
-        ][orderId % 4],
+        orderStatus: OrderStatus.values[orderId % 4],
         isDelivery: orderId % 3 == 0,
         totalPrice: orderId * 35.5 + 10,
         customerName: 'Vimal K',
