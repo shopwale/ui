@@ -6,7 +6,7 @@ class Order {
   final int customerId;
   final DateTime orderDate;
   final double totalPrice;
-  final String orderStatus;
+  final OrderStatus orderStatus;
   final bool isDelivery;
   final String customerName;
 
@@ -30,6 +30,26 @@ class Order {
           totalPrice: json['totalPrice'],
           customerName: json['customerName'],
         );
+}
+
+enum OrderStatus {
+  pending,
+  accepted,
+  rejected,
+  completed, // delivered or picked up.
+  outForDelivery,
+}
+
+extension OrderStatusExtension on OrderStatus {
+  String asString() {
+    return describeEnum(this)
+        .replaceAllMapped("([A-Z])", (m) => ' ${m[0].toLowerCase()}');
+  }
+
+  OrderStatus asOrderStatus(String value) {
+    return OrderStatus.values
+        .firstWhere((e) => e.toString() == 'Unit.${value.toLowerCase()}');
+  }
 }
 
 class ItemOrder {
