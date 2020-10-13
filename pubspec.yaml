@@ -39,6 +39,8 @@ dependencies:
 
   intl:
 
+  strings:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
