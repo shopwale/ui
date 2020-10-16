@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:inject/inject.dart';
+import 'package:vendor/services/lib/catalog.dart';
 import 'package:vendor/services/lib/order.dart';
 import 'package:vendor/services/lib/provider.dart';
 import 'package:vendor/types/lib/inject.dart';
@@ -20,6 +21,7 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   final ProviderService providerService;
   final OrderService orderService;
+  final CatalogService catalogService;
   final CurrentOrdersFactory currentOrdersFactory;
   int mobileNumber;
 
@@ -27,6 +29,7 @@ class LoginState extends State<Login> {
     this.providerService,
     this.orderService,
     this.currentOrdersFactory,
+    this.catalogService,
   );
 
   @override
@@ -68,12 +71,16 @@ class LoginState extends State<Login> {
 
                   print(provider.name);
 
-                  final orders = await orderService.getOrders(provider.id);
+                  final details = await Future.wait([
+                    orderService.getOrders(provider.id),
+                    catalogService.byProviderId(provider.id),
+                  ]);
 
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => currentOrdersFactory.create(
-                        orders: orders,
+                        orders: details[0],
+                        catalogItems: details[1],
                       ),
                     ),
                   );

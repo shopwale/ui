@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inject/inject.dart';
 import 'package:vendor/common/lib/constants.dart';
+import 'package:vendor/models/lib/catalog.dart';
 import 'package:vendor/models/lib/order.dart';
 import 'package:vendor/services/lib/customer.dart';
 import 'package:vendor/services/lib/order.dart';
@@ -14,18 +15,27 @@ class CurrentOrdersFactory {
 
   CurrentOrdersFactory(this.stateProvider);
 
-  CurrentOrders create({@required List<Order> orders}) =>
-      CurrentOrders(stateProvider(), orders: orders);
+  CurrentOrders create({
+    @required List<Order> orders,
+    @required List<CatalogItem> catalogItems,
+  }) =>
+      CurrentOrders(
+        stateProvider(),
+        orders: orders,
+        catalogItems: catalogItems,
+      );
 }
 
 class CurrentOrders extends StatefulWidget {
   final List<Order> orders;
+  final List<CatalogItem> catalogItems;
   final CurrentOrdersState state;
 
   CurrentOrders(
     this.state, {
     Key key,
     @required this.orders,
+    @required this.catalogItems,
   }) : super(key: key);
 
   @override
@@ -77,7 +87,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
                   onTap: () async {
                     final details = await Future.wait([
                       orderService.getOrderDetails(o.orderId),
-                      customerService.getCustomerById(o.customerId)
+                      customerService.getCustomerById(o.customerId),
                     ]);
 
                     Navigator.of(context).push(
@@ -86,6 +96,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
                           order: o,
                           itemOrders: details[0],
                           customer: details[1],
+                          catalogItems: widget.catalogItems,
                         ),
                       ),
                     );

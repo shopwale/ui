@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:strings/strings.dart';
 import 'package:vendor/models/lib/catalog.dart';
 
 class Order {
@@ -50,19 +51,16 @@ extension OrderStatusEnumExtension on OrderStatusEnum {
     switch (this) {
       case OrderStatusEnum.pending:
         return 'Pending';
-        break;
       case OrderStatusEnum.accepted:
         return 'Accept';
-        break;
       case OrderStatusEnum.rejected:
         return 'Reject';
-        break;
       case OrderStatusEnum.completed:
         return 'Complete';
-        break;
       case OrderStatusEnum.outForDelivery:
         return 'Out for Delivery';
-        break;
+      default:
+        throw 'Invalid Status';
     }
   }
 }
@@ -87,7 +85,7 @@ class ItemOrder {
       : this(
           quantity: json['quantity'],
           subTotalPrice: json[''],
-          item: CatalogItem(name: 'XYZ', id: json['itemId']),
+          item: CatalogItem(id: json['itemId']),
         );
 
   Map<String, dynamic> toMap() => {
@@ -110,6 +108,6 @@ class OrderStatus {
 
   Map<String, dynamic> toMap() => {
         'orderId': orderId,
-        'orderStatus': status.asString(),
+        'orderStatus': capitalize(status.asString()),
       };
 }

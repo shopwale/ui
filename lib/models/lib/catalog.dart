@@ -12,7 +12,7 @@ class CatalogItem {
   final List<String> tags;
 
   CatalogItem({
-    @required this.name,
+    this.name,
     @required this.id,
     this.unitOfMeasure = Unit.pieces,
     this.categoryId,

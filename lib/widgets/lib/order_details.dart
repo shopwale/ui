@@ -21,12 +21,14 @@ class OrderDetailsFactory {
     @required List<ItemOrder> itemOrders,
     @required Order order,
     @required Customer customer,
+    @required List<CatalogItem> catalogItems,
   }) =>
       OrderDetails(
         stateProvider(),
         itemOrders: itemOrders,
         order: order,
         customer: customer,
+        catalogItems: catalogItems,
       );
 }
 
@@ -34,6 +36,7 @@ class OrderDetails extends StatefulWidget {
   final Order order;
   final List<ItemOrder> itemOrders;
   final Customer customer;
+  final List<CatalogItem> catalogItems;
   final OrderDetailsState orderDetailsState;
 
   OrderDetails(
@@ -42,6 +45,7 @@ class OrderDetails extends StatefulWidget {
     @required this.itemOrders,
     @required this.order,
     @required this.customer,
+    @required this.catalogItems,
   }) : super(key: key);
 
   @override
@@ -81,29 +85,35 @@ class OrderDetailsState extends State<OrderDetails> {
       padding: EdgeInsets.all(16.0),
       child: ListView(
         key: Key('ItemOrdersList'),
-        children: widget.itemOrders
-            .map(
-              (itemOrder) => Padding(
-                key: Key(itemOrder.item.id.toString()),
-                padding: EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 40,
-                      child: Text(itemOrder.quantity.toString()),
-                    ),
-                    SizedBox(
-                      width: 20,
-                      child: Text(itemOrder.item.unitOfMeasure.asString()),
-                    ),
-                    SizedBox(width: 32.0),
-                    Text(
-                        '${itemOrder.item.subCategoryName} - ${itemOrder.item.name}'),
-                  ],
+        children: widget.itemOrders.map((itemOrder) {
+          final catalogItem = widget.catalogItems.firstWhere(
+            (element) => element.id == itemOrder.item.id,
+            orElse: () => CatalogItem(
+              id: 1,
+              name: 'Onion',
+              subCategoryName: 'Veggies',
+            ),
+          );
+
+          return Padding(
+            key: Key(itemOrder.item.id.toString()),
+            padding: EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 40,
+                  child: Text(itemOrder.quantity.toString()),
                 ),
-              ),
-            )
-            .toList(),
+                SizedBox(
+                  width: 20,
+                  child: Text(catalogItem.unitOfMeasure.asString()),
+                ),
+                SizedBox(width: 32.0),
+                Text('${catalogItem.subCategoryName} - ${catalogItem.name}'),
+              ],
+            ),
+          );
+        }).toList(),
       ),
     );
   }
