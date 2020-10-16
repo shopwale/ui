@@ -3,8 +3,10 @@ import 'package:inject/inject.dart';
 import 'package:intl/intl.dart';
 import 'package:strings/strings.dart';
 import 'package:vendor/common/lib/constants.dart';
+import 'package:vendor/models/lib/customer.dart';
 import 'package:vendor/models/lib/order.dart';
 import 'package:vendor/models/lib/catalog.dart';
+import 'package:vendor/services/lib/customer.dart';
 import 'package:vendor/services/lib/order.dart';
 import 'package:vendor/types/lib/inject.dart';
 
@@ -18,13 +20,20 @@ class OrderDetailsFactory {
     Key key,
     @required List<ItemOrder> itemOrders,
     @required Order order,
+    @required Customer customer,
   }) =>
-      OrderDetails(stateProvider(), itemOrders: itemOrders, order: order);
+      OrderDetails(
+        stateProvider(),
+        itemOrders: itemOrders,
+        order: order,
+        customer: customer,
+      );
 }
 
 class OrderDetails extends StatefulWidget {
   final Order order;
   final List<ItemOrder> itemOrders;
+  final Customer customer;
   final OrderDetailsState orderDetailsState;
 
   OrderDetails(
@@ -32,6 +41,7 @@ class OrderDetails extends StatefulWidget {
     Key key,
     @required this.itemOrders,
     @required this.order,
+    @required this.customer,
   }) : super(key: key);
 
   @override
@@ -41,8 +51,9 @@ class OrderDetails extends StatefulWidget {
 @provide
 class OrderDetailsState extends State<OrderDetails> {
   final OrderService orderService;
+  final CustomerService customerService;
 
-  OrderDetailsState(this.orderService);
+  OrderDetailsState(this.orderService, this.customerService);
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +126,12 @@ class OrderDetailsState extends State<OrderDetails> {
               label: 'Type',
               data: widget.order.isDelivery ? 'Delivery' : 'Pickup',
             ),
+            if (widget.order.isDelivery)
+              _buildLabelledData(
+                context,
+                label: 'Address',
+                data: '${widget.customer.address} ${widget.customer.pinCode}',
+              ),
             _buildLabelledData(
               context,
               label: 'Status',
@@ -170,7 +187,12 @@ class OrderDetailsState extends State<OrderDetails> {
             widget.order.orderStatus = updatedOrderStatus.status;
           });
         },
-        child: Text(capitalize(orderStatusEnum.asActionString())),
+        child: Text(
+          capitalize(orderStatusEnum.asActionString()),
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }
@@ -185,7 +207,7 @@ class OrderDetailsState extends State<OrderDetails> {
       child: Row(
         children: [
           _buildLabel(context, label),
-          SizedBox(width: 32.0),
+          SizedBox(width: 16.0),
           Text(
             data,
             style: TextStyle(
@@ -199,11 +221,12 @@ class OrderDetailsState extends State<OrderDetails> {
 
   SizedBox _buildLabel(BuildContext context, String data) {
     final labelTextStyle = TextStyle(
+      color: Theme.of(context).textTheme.headline6.color.withOpacity(0.7),
       fontSize: Theme.of(context).textTheme.headline6.fontSize,
     );
 
     return SizedBox(
-      width: 60.0,
+      width: 80.0,
       child: Text(data, style: labelTextStyle),
     );
   }

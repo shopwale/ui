@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inject/inject.dart';
 import 'package:vendor/common/lib/constants.dart';
 import 'package:vendor/models/lib/order.dart';
+import 'package:vendor/services/lib/customer.dart';
 import 'package:vendor/services/lib/order.dart';
 import 'package:vendor/types/lib/inject.dart';
 import 'package:vendor/widgets/lib/order_details.dart';
@@ -34,7 +35,9 @@ class CurrentOrders extends StatefulWidget {
 @provide
 class CurrentOrdersState extends State<CurrentOrders> {
   final OrderService orderService;
+  final CustomerService customerService;
   final OrderDetailsFactory orderDetailsFactory;
+
   bool showDeliveryOrders = false;
   bool showPickupOrders = false;
   Set<OrderStatusEnum> statusesToFilter = {
@@ -43,7 +46,11 @@ class CurrentOrdersState extends State<CurrentOrders> {
   };
   List<Order> visibleOrders = [];
 
-  CurrentOrdersState(this.orderService, this.orderDetailsFactory);
+  CurrentOrdersState(
+    this.orderService,
+    this.orderDetailsFactory,
+    this.customerService,
+  );
 
   @override
   void initState() {
@@ -68,14 +75,17 @@ class CurrentOrdersState extends State<CurrentOrders> {
               .map(
                 (o) => GestureDetector(
                   onTap: () async {
-                    final itemOrders =
-                        await orderService.getOrderDetails(o.orderId);
+                    final details = await Future.wait([
+                      orderService.getOrderDetails(o.orderId),
+                      customerService.getCustomerById(o.customerId)
+                    ]);
 
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => orderDetailsFactory.create(
                           order: o,
-                          itemOrders: itemOrders,
+                          itemOrders: details[0],
+                          customer: details[1],
                         ),
                       ),
                     );
