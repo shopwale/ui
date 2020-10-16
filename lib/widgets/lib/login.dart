@@ -57,25 +57,27 @@ class LoginState extends State<Login> {
               ),
               SizedBox(height: 16.0),
               FlatButton(
-                onPressed: mobileNumber?.toString()?.length != 10
-                    ? null
-                    : () async {
-                        final provider = await providerService
-                            .getServiceProviderInfo(mobileNumber);
+                onPressed:
+                    // mobileNumber?.toString()?.length != 10
+                    //     ? null
+                    //     :
 
-                        print(provider.name);
+                    () async {
+                  final provider = await providerService
+                      .getServiceProviderInfo(mobileNumber);
 
-                        final orders =
-                            await orderService.getOrders(provider.id);
+                  print(provider.name);
 
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => currentOrdersFactory.create(
-                              orders: orders,
-                            ),
-                          ),
-                        );
-                      },
+                  final orders = await orderService.getOrders(provider.id);
+
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => currentOrdersFactory.create(
+                        orders: orders,
+                      ),
+                    ),
+                  );
+                },
                 child: Text('Log In'),
                 color: Theme.of(context).accentColor,
                 textColor: Colors.white,

@@ -6,14 +6,10 @@ import 'package:vendor/services/lib/provider.dart';
 @module
 class Services {
   @provide
-  ProviderService provideProvideService() {
-    throw UnimplementedError();
-  }
+  ProviderService provideProvideService() => ProviderService();
 
   @provide
-  OrderService provideOrderService() {
-    throw UnimplementedError();
-  }
+  OrderService provideOrderService() => OrderService();
 
   @provide
   CatalogService provideCatalogService() => CatalogService();

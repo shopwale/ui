@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:inject/inject.dart';
 import 'package:vendor/services/lib/module.dart';
 import 'app.dart';
-import 'main.inject.dart' as g;
+import 'dev_main.inject.dart' as g;
 
 void main() async {
-  final injector = await ProdInjector.create(new Services());
+  final injector = await DevInjector.create(new DevServices());
   runApp(injector.app);
 }
 
-@Injector(const [Services])
-abstract class ProdInjector {
+@Injector(const [DevServices])
+abstract class DevInjector {
   @provide
   VendorApp get app;
 
-  static final create = g.ProdInjector$Injector.create;
+  static final create = g.DevInjector$Injector.create;
 }

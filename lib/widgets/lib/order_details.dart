@@ -1,31 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:inject/inject.dart';
 import 'package:intl/intl.dart';
 import 'package:strings/strings.dart';
 import 'package:vendor/common/lib/constants.dart';
 import 'package:vendor/models/lib/order.dart';
 import 'package:vendor/models/lib/catalog.dart';
+import 'package:vendor/services/lib/order.dart';
+import 'package:vendor/types/lib/inject.dart';
 
-class OrderDetails extends StatelessWidget {
+@provide
+class OrderDetailsFactory {
+  final Provider<OrderDetailsState> stateProvider;
+
+  OrderDetailsFactory(this.stateProvider);
+
+  OrderDetails create({
+    Key key,
+    @required List<ItemOrder> itemOrders,
+    @required Order order,
+  }) =>
+      OrderDetails(stateProvider(), itemOrders: itemOrders, order: order);
+}
+
+class OrderDetails extends StatefulWidget {
   final Order order;
   final List<ItemOrder> itemOrders;
+  final OrderDetailsState orderDetailsState;
 
-  const OrderDetails({
+  OrderDetails(
+    this.orderDetailsState, {
     Key key,
     @required this.itemOrders,
     @required this.order,
   }) : super(key: key);
 
   @override
+  State<StatefulWidget> createState() => orderDetailsState;
+}
+
+@provide
+class OrderDetailsState extends State<OrderDetails> {
+  final OrderService orderService;
+
+  OrderDetailsState(this.orderService);
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order by ${order.customerName}'),
-      ),
-      floatingActionButton: FlatButton(
-        onPressed: () {},
-        child: Text('Update Status'),
-        color: Theme.of(context).accentColor,
-        textColor: Colors.white,
+        title: Text('Order by ${widget.order.customerName}'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -47,7 +70,7 @@ class OrderDetails extends StatelessWidget {
       padding: EdgeInsets.all(16.0),
       child: ListView(
         key: Key('ItemOrdersList'),
-        children: itemOrders
+        children: widget.itemOrders
             .map(
               (itemOrder) => Padding(
                 key: Key(itemOrder.item.id.toString()),
@@ -85,25 +108,69 @@ class OrderDetails extends StatelessWidget {
             _buildLabelledData(
               context,
               label: 'Date',
-              data: formatter.format(order.orderDate),
+              data: formatter.format(widget.order.orderDate),
             ),
             _buildLabelledData(
               context,
               label: 'Type',
-              data: order.isDelivery ? 'Delivery' : 'Pickup',
+              data: widget.order.isDelivery ? 'Delivery' : 'Pickup',
             ),
             _buildLabelledData(
               context,
               label: 'Status',
-              data: capitalize(order.orderStatus.asString()),
+              data: capitalize(widget.order.orderStatus.asString()),
             ),
             _buildLabelledData(
               context,
               label: 'Total',
-              data: '$rupeeSymbol ${order.totalPrice}',
+              data: '$rupeeSymbol ${widget.order.totalPrice}',
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (widget.order.orderStatus == OrderStatusEnum.pending)
+                  _buildUpdateStatusButton(context, OrderStatusEnum.accepted),
+                if (widget.order.orderStatus == OrderStatusEnum.pending)
+                  _buildUpdateStatusButton(context, OrderStatusEnum.rejected),
+                if (widget.order.orderStatus == OrderStatusEnum.accepted &&
+                    widget.order.isDelivery)
+                  _buildUpdateStatusButton(
+                      context, OrderStatusEnum.outForDelivery),
+                if (widget.order.orderStatus == OrderStatusEnum.accepted &&
+                    !widget.order.isDelivery)
+                  _buildUpdateStatusButton(context, OrderStatusEnum.completed),
+                if (widget.order.orderStatus ==
+                        OrderStatusEnum.outForDelivery &&
+                    widget.order.isDelivery)
+                  _buildUpdateStatusButton(context, OrderStatusEnum.completed),
+              ],
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildUpdateStatusButton(
+    BuildContext context,
+    OrderStatusEnum orderStatusEnum,
+  ) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 4.0),
+      child: FlatButton(
+        color: Theme.of(context).accentColor,
+        onPressed: () async {
+          final updatedOrderStatus = await orderService.updateOrderStatus(
+            OrderStatus(
+              orderId: widget.order.orderId,
+              status: orderStatusEnum,
+            ),
+          );
+          setState(() {
+            widget.order.orderStatus = updatedOrderStatus.status;
+          });
+        },
+        child: Text(capitalize(orderStatusEnum.asActionString())),
       ),
     );
   }
@@ -119,7 +186,12 @@ class OrderDetails extends StatelessWidget {
         children: [
           _buildLabel(context, label),
           SizedBox(width: 32.0),
-          Text(data),
+          Text(
+            data,
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.headline6.fontSize,
+            ),
+          ),
         ],
       ),
     );

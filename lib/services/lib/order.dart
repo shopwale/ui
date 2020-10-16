@@ -2,11 +2,39 @@ import 'dart:math';
 
 import 'package:vendor/models/lib/catalog.dart';
 import 'package:vendor/models/lib/order.dart';
+import 'package:vendor/services/lib/db.dart';
 
-abstract class OrderService {
-  Future<List<Order>> getOrders(int serviceProviderId);
+class OrderService {
+  Future<List<Order>> getOrders(int serviceProviderId) async {
+    // http://localshopwala.com:3001/getOrders?serviceProviderId=2
+    final dbClient = DbClient('getOrders', serverPort: 3001);
+    final orders = await dbClient.get(queryParams: {
+      'serviceProviderId': serviceProviderId.toString(),
+    });
 
-  Future<List<ItemOrder>> getOrderDetails(int orderId);
+    return orders.map<Order>((orderJson) => Order.fromJson(orderJson)).toList();
+  }
+
+  Future<List<ItemOrder>> getOrderDetails(int orderId) async {
+    // http://localshopwala.com:3001/getOrderDetails?orderId=13
+    final dbClient = DbClient('getOrderDetails', serverPort: 3001);
+    final response = await dbClient.get(queryParams: {
+      'orderId': orderId.toString(),
+    });
+
+    final items = response['items'];
+    return items
+        .map<ItemOrder>((itemOrderJson) => ItemOrder.fromJson(itemOrderJson))
+        .toList();
+  }
+
+  Future<OrderStatus> updateOrderStatus(OrderStatus update) async {
+    // http://localshopwala.com:3001/updateOrderStatus
+    // payload: {"orderId":2,"orderStatus":"Pending"}
+    final dbClient = DbClient('updateOrderStatus', serverPort: 3001);
+    final response = await dbClient.post(body: update.toMap());
+    return OrderStatus.fromJson(response);
+  }
 }
 
 class FakeOrderService implements OrderService {
@@ -22,7 +50,7 @@ class FakeOrderService implements OrderService {
         customerId: _rnd.nextInt(10) + 1,
         orderId: orderId,
         orderDate: DateTime.now(),
-        orderStatus: OrderStatus.values[_rnd.nextInt(4)],
+        orderStatus: OrderStatusEnum.values[_rnd.nextInt(4)],
         isDelivery: _rnd.nextBool(),
         totalPrice: (_rnd.nextInt(10) + 1) * 700.0,
         customerName: 'Vimal K',
@@ -46,6 +74,10 @@ class FakeOrderService implements OrderService {
         quantity: _rnd.nextInt(11) + 1,
         subTotalPrice: (_rnd.nextInt(10) + 1) * 100.0,
       );
+
+  @override
+  Future<OrderStatus> updateOrderStatus(OrderStatus update) =>
+      Future.value(update);
 }
 
 const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';

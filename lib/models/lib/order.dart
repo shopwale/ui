@@ -6,7 +6,7 @@ class Order {
   final int customerId;
   final DateTime orderDate;
   final double totalPrice;
-  final OrderStatus orderStatus;
+  OrderStatusEnum orderStatus;
   final bool isDelivery;
   final String customerName;
 
@@ -25,14 +25,14 @@ class Order {
           customerId: json['customerId'],
           orderId: json['orderId'],
           orderDate: DateTime.parse(json['orderDate']),
-          orderStatus: json['orderStatus'],
+          orderStatus: toOrderStatusEnum(json['orderStatus']),
           isDelivery: json['isDeliver'] == "true",
-          totalPrice: json['totalPrice'],
+          totalPrice: json['totalPrice'].toDouble(),
           customerName: json['customerName'],
         );
 }
 
-enum OrderStatus {
+enum OrderStatusEnum {
   pending,
   accepted,
   rejected,
@@ -40,16 +40,36 @@ enum OrderStatus {
   outForDelivery,
 }
 
-extension OrderStatusExtension on OrderStatus {
+extension OrderStatusEnumExtension on OrderStatusEnum {
   String asString() {
     return describeEnum(this)
         .replaceAllMapped("([A-Z])", (m) => ' ${m[0].toLowerCase()}');
   }
 
-  OrderStatus asOrderStatus(String value) {
-    return OrderStatus.values
-        .firstWhere((e) => e.toString() == 'Unit.${value.toLowerCase()}');
+  String asActionString() {
+    switch (this) {
+      case OrderStatusEnum.pending:
+        return 'Pending';
+        break;
+      case OrderStatusEnum.accepted:
+        return 'Accept';
+        break;
+      case OrderStatusEnum.rejected:
+        return 'Reject';
+        break;
+      case OrderStatusEnum.completed:
+        return 'Complete';
+        break;
+      case OrderStatusEnum.outForDelivery:
+        return 'Out for Delivery';
+        break;
+    }
   }
+}
+
+OrderStatusEnum toOrderStatusEnum(String value) {
+  return OrderStatusEnum.values.firstWhere(
+      (e) => e.toString() == 'OrderStatusEnum.${value.toLowerCase()}');
 }
 
 class ItemOrder {
@@ -63,9 +83,33 @@ class ItemOrder {
     @required this.subTotalPrice,
   });
 
+  ItemOrder.fromJson(Map<String, dynamic> json)
+      : this(
+          quantity: json['quantity'],
+          subTotalPrice: json[''],
+          item: CatalogItem(name: 'XYZ', id: json['itemId']),
+        );
+
   Map<String, dynamic> toMap() => {
         'itemId': item.id,
         'quantity': quantity,
         'subTotalPrice': subTotalPrice,
+      };
+}
+
+class OrderStatus {
+  final int orderId;
+  final OrderStatusEnum status;
+
+  OrderStatus({@required this.orderId, @required this.status});
+
+  static OrderStatus fromJson(Map<String, dynamic> json) => OrderStatus(
+        orderId: json['orderId'],
+        status: toOrderStatusEnum(json['orderStatus']),
+      );
+
+  Map<String, dynamic> toMap() => {
+        'orderId': orderId,
+        'orderStatus': status.asString(),
       };
 }

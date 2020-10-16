@@ -1,7 +1,15 @@
 import 'package:vendor/models/lib/provider.dart';
+import 'package:vendor/services/lib/db.dart';
 
-abstract class ProviderService {
-  Future<Provider> getServiceProviderInfo(int mobileNumber);
+class ProviderService {
+  Future<Provider> getServiceProviderInfo(int mobileNumber) async {
+    // http://localshopwala.com:3001/getServiceProviderInfo?serviceProviderMobile=989898934
+    final dbClient = DbClient('getServiceProviderInfo', serverPort: 3001);
+    final jsonResponse = await dbClient
+        .get(queryParams: {'serviceProviderMobile': mobileNumber.toString()});
+
+    return Provider.fromJson(jsonResponse);
+  }
 }
 
 class FakeProviderService extends ProviderService {

@@ -21,7 +21,11 @@ class CurrentOrders extends StatefulWidget {
   final List<Order> orders;
   final CurrentOrdersState state;
 
-  CurrentOrders(this.state, {Key key, @required this.orders}) : super(key: key);
+  CurrentOrders(
+    this.state, {
+    Key key,
+    @required this.orders,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => state;
@@ -30,15 +34,16 @@ class CurrentOrders extends StatefulWidget {
 @provide
 class CurrentOrdersState extends State<CurrentOrders> {
   final OrderService orderService;
+  final OrderDetailsFactory orderDetailsFactory;
   bool showDeliveryOrders = false;
   bool showPickupOrders = false;
-  Set<OrderStatus> statusesToFilter = {
-    OrderStatus.pending,
-    OrderStatus.accepted,
+  Set<OrderStatusEnum> statusesToFilter = {
+    OrderStatusEnum.pending,
+    OrderStatusEnum.accepted,
   };
   List<Order> visibleOrders = [];
 
-  CurrentOrdersState(this.orderService);
+  CurrentOrdersState(this.orderService, this.orderDetailsFactory);
 
   @override
   void initState() {
@@ -68,7 +73,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
 
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => OrderDetails(
+                        builder: (_) => orderDetailsFactory.create(
                           order: o,
                           itemOrders: itemOrders,
                         ),
@@ -126,22 +131,22 @@ class CurrentOrdersState extends State<CurrentOrders> {
             onSelected: (selected) {
               if (selected) {
                 setState(() {
-                  statusesToFilter = <OrderStatus>{};
+                  statusesToFilter = <OrderStatusEnum>{};
                   _updateVisibleOrders();
                 });
               }
             },
           ),
-          _buildStatusFilter(OrderStatus.pending),
-          _buildStatusFilter(OrderStatus.rejected),
-          _buildStatusFilter(OrderStatus.accepted),
-          _buildStatusFilter(OrderStatus.completed),
+          _buildStatusFilter(OrderStatusEnum.pending),
+          _buildStatusFilter(OrderStatusEnum.rejected),
+          _buildStatusFilter(OrderStatusEnum.accepted),
+          // _buildStatusFilter(OrderStatusEnum.completed),
         ],
       ),
     );
   }
 
-  ChoiceChip _buildStatusFilter(OrderStatus status) {
+  ChoiceChip _buildStatusFilter(OrderStatusEnum status) {
     return ChoiceChip(
       label: Text(status.asString()),
       selected: statusesToFilter.contains(status),
