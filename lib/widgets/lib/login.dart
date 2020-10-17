@@ -79,7 +79,8 @@ class LoginState extends State<Login> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => currentOrdersFactory.create(
-                        orders: details[0],
+                        serviceProviderId: provider.id,
+                        // orders: details[0],
                         catalogItems: details[1],
                       ),
                     ),

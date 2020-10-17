@@ -27,7 +27,7 @@ class Order {
           orderId: json['orderId'],
           orderDate: DateTime.parse(json['orderDate']),
           orderStatus: toOrderStatusEnum(json['orderStatus']),
-          isDelivery: json['isDeliver'] == "true",
+          isDelivery: json['isDeliver'],
           totalPrice: json['totalPrice'].toDouble(),
           customerName: json['customerName'],
         );
@@ -38,13 +38,14 @@ enum OrderStatusEnum {
   accepted,
   rejected,
   completed, // delivered or picked up.
-  outForDelivery,
+  outToDeliver,
+  readyToPick,
 }
 
 extension OrderStatusEnumExtension on OrderStatusEnum {
   String asString() {
     return describeEnum(this)
-        .replaceAllMapped("([A-Z])", (m) => ' ${m[0].toLowerCase()}');
+        .replaceAllMapped(RegExp("([A-Z])"), (m) => ' ${m[0].toLowerCase()}');
   }
 
   String asActionString() {
@@ -57,8 +58,10 @@ extension OrderStatusEnumExtension on OrderStatusEnum {
         return 'Reject';
       case OrderStatusEnum.completed:
         return 'Complete';
-      case OrderStatusEnum.outForDelivery:
-        return 'Out for Delivery';
+      case OrderStatusEnum.outToDeliver:
+        return 'Out to deliver';
+      case OrderStatusEnum.readyToPick:
+        return 'Ready to pick';
       default:
         throw 'Invalid Status';
     }
@@ -66,8 +69,8 @@ extension OrderStatusEnumExtension on OrderStatusEnum {
 }
 
 OrderStatusEnum toOrderStatusEnum(String value) {
-  return OrderStatusEnum.values.firstWhere(
-      (e) => e.toString() == 'OrderStatusEnum.${value.toLowerCase()}');
+  return OrderStatusEnum.values.firstWhere((e) =>
+      e.toString().toLowerCase() == 'orderstatusenum.${value.toLowerCase()}');
 }
 
 class ItemOrder {
@@ -108,6 +111,6 @@ class OrderStatus {
 
   Map<String, dynamic> toMap() => {
         'orderId': orderId,
-        'orderStatus': capitalize(status.asString()),
+        'orderStatus': capitalize(describeEnum(status)),
       };
 }

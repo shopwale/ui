@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:inject/inject.dart';
 import 'package:vendor/common/lib/constants.dart';
@@ -16,25 +18,25 @@ class CurrentOrdersFactory {
   CurrentOrdersFactory(this.stateProvider);
 
   CurrentOrders create({
-    @required List<Order> orders,
+    @required int serviceProviderId,
     @required List<CatalogItem> catalogItems,
   }) =>
       CurrentOrders(
         stateProvider(),
-        orders: orders,
+        serviceProviderId: serviceProviderId,
         catalogItems: catalogItems,
       );
 }
 
 class CurrentOrders extends StatefulWidget {
-  final List<Order> orders;
+  final int serviceProviderId;
   final List<CatalogItem> catalogItems;
   final CurrentOrdersState state;
 
   CurrentOrders(
     this.state, {
     Key key,
-    @required this.orders,
+    @required this.serviceProviderId,
     @required this.catalogItems,
   }) : super(key: key);
 
@@ -48,6 +50,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
   final CustomerService customerService;
   final OrderDetailsFactory orderDetailsFactory;
 
+  List<Order> orders;
   bool showDeliveryOrders = false;
   bool showPickupOrders = false;
   Set<OrderStatusEnum> statusesToFilter = {
@@ -55,6 +58,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
     OrderStatusEnum.accepted,
   };
   List<Order> visibleOrders = [];
+  Timer _timer;
 
   CurrentOrdersState(
     this.orderService,
@@ -65,7 +69,22 @@ class CurrentOrdersState extends State<CurrentOrders> {
   @override
   void initState() {
     super.initState();
-    _updateVisibleOrders();
+    _fetchOrdersAndUpdateState(null);
+
+    _timer = Timer.periodic(Duration(minutes: 1), _fetchOrdersAndUpdateState);
+  }
+
+  Future<void> _fetchOrdersAndUpdateState(_) async {
+    orders = await orderService.getOrders(widget.serviceProviderId);
+    setState(() {
+      _updateVisibleOrders();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
   }
 
   @override
@@ -76,61 +95,71 @@ class CurrentOrdersState extends State<CurrentOrders> {
       appBar: AppBar(
         title: Text('Your Orders'),
       ),
-      body: ListView(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 8.0),
           _buildStatusFilters(),
           _buildTypeFilters(),
-          ...visibleOrders
-              .map(
-                (o) => GestureDetector(
-                  onTap: () async {
-                    final details = await Future.wait([
-                      orderService.getOrderDetails(o.orderId),
-                      customerService.getCustomerById(o.customerId),
-                    ]);
+          Flexible(
+            child: RefreshIndicator(
+              onRefresh: () async {
+                await _fetchOrdersAndUpdateState(null);
+              },
+              child: ListView(
+                children: visibleOrders
+                    .map(
+                      (o) => GestureDetector(
+                        onTap: () async {
+                          final details = await Future.wait([
+                            orderService.getOrderDetails(o.orderId),
+                            customerService.getCustomerById(o.customerId),
+                          ]);
 
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => orderDetailsFactory.create(
-                          order: o,
-                          itemOrders: details[0],
-                          customer: details[1],
-                          catalogItems: widget.catalogItems,
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => orderDetailsFactory.create(
+                                order: o,
+                                itemOrders: details[0],
+                                customer: details[1],
+                                catalogItems: widget.catalogItems,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Card(
+                          key: Key(o.orderId.toString()),
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(top: 16.0, left: 16.0),
+                                alignment: Alignment.topLeft,
+                                child: Text(formatter.format(o.orderDate)),
+                              ),
+                              ListTile(
+                                leading: Icon(
+                                  o.isDelivery
+                                      ? Icons.delivery_dining
+                                      : Icons.shopping_bag,
+                                  color: o.isDelivery
+                                      ? Theme.of(context).accentColor
+                                      : Theme.of(context)
+                                          .accentColor
+                                          .withOpacity(0.5),
+                                ),
+                                title: Text('${o.customerName}'),
+                                subtitle: Text('${o.orderStatus.asString()}'),
+                                trailing: Text('$rupeeSymbol ${o.totalPrice}'),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    );
-                  },
-                  child: Card(
-                    key: Key(o.orderId.toString()),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(top: 16.0, left: 16.0),
-                          alignment: Alignment.topLeft,
-                          child: Text(formatter.format(o.orderDate)),
-                        ),
-                        ListTile(
-                          leading: Icon(
-                            o.isDelivery
-                                ? Icons.delivery_dining
-                                : Icons.shopping_bag,
-                            color: o.isDelivery
-                                ? Theme.of(context).accentColor
-                                : Theme.of(context)
-                                    .accentColor
-                                    .withOpacity(0.5),
-                          ),
-                          title: Text('${o.customerName}'),
-                          subtitle: Text('${o.orderStatus.asString()}'),
-                          trailing: Text('$rupeeSymbol ${o.totalPrice}'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-              .toList(),
+                    )
+                    .toList(),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -234,8 +263,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
   }
 
   void _updateVisibleOrders() {
-    visibleOrders =
-        widget.orders.where((order) => _filterOrder(order)).toList();
+    visibleOrders = orders.where((order) => _filterOrder(order)).toList();
   }
 
   bool _filterOrder(Order order) {

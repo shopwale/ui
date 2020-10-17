@@ -162,13 +162,13 @@ class OrderDetailsState extends State<OrderDetails> {
                 if (widget.order.orderStatus == OrderStatusEnum.accepted &&
                     widget.order.isDelivery)
                   _buildUpdateStatusButton(
-                      context, OrderStatusEnum.outForDelivery),
+                      context, OrderStatusEnum.outToDeliver),
                 if (widget.order.orderStatus == OrderStatusEnum.accepted &&
                     !widget.order.isDelivery)
-                  _buildUpdateStatusButton(context, OrderStatusEnum.completed),
-                if (widget.order.orderStatus ==
-                        OrderStatusEnum.outForDelivery &&
-                    widget.order.isDelivery)
+                  _buildUpdateStatusButton(
+                      context, OrderStatusEnum.readyToPick),
+                if (widget.order.orderStatus == OrderStatusEnum.outToDeliver ||
+                    widget.order.orderStatus == OrderStatusEnum.readyToPick)
                   _buildUpdateStatusButton(context, OrderStatusEnum.completed),
               ],
             ),
