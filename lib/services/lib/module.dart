@@ -1,6 +1,7 @@
 import 'package:inject/inject.dart';
 import 'package:vendor/services/lib/catalog.dart';
 import 'package:vendor/services/lib/customer.dart';
+import 'package:vendor/services/lib/notification.dart';
 import 'package:vendor/services/lib/order.dart';
 import 'package:vendor/services/lib/provider.dart';
 
@@ -17,6 +18,9 @@ class Services {
 
   @provide
   CustomerService provideCustomerService() => CustomerService();
+
+  @provide
+  NotificationService provideNotificationService() => NotificationService();
 }
 
 @module
@@ -35,4 +39,7 @@ class DevServices implements Services {
 
   @provide
   CustomerService provideCustomerService() => FakeCustomerService();
+
+  @provide
+  NotificationService provideNotificationService() => FakeNotificationService();
 }

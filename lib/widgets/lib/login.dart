@@ -90,15 +90,15 @@ class LoginState extends State<Login> {
               ),
               SizedBox(height: 16.0),
               FlatButton(
-                onPressed: mobileNumber?.toString()?.length != 9
+                onPressed: mobileNumber?.toString()?.length != 10
                     ? null
                     : () async {
                         final provider = await providerService
                             .getServiceProviderInfo(mobileNumber);
 
                         if (!provider.tokens.contains(fcmToken)) {
-                          notificationService.addVendorFcmToken(
-                              customerId: provider.id, token: fcmToken);
+                          notificationService.addProviderFcmToken(
+                              serviceProviderId: provider.id, token: fcmToken);
                         }
 
                         final details = await Future.wait([
