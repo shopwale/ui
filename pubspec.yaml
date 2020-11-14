@@ -28,7 +28,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
 
-  http:
+  http: ^0.12.2
+
+  firebase_messaging: ^7.0.3
 
   # Dependency injection
   inject:

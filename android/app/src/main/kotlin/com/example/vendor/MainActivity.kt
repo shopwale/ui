@@ -1,4 +1,4 @@
-package com.example.vendor
+package com.local.vendor
 
 import io.flutter.embedding.android.FlutterActivity
 
