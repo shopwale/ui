@@ -25,13 +25,4 @@ dependencies:
 
   http: ^0.12.2
 
-  # Dependency injection
-  inject:
-    git:
-      url: https://github.com/google/inject.dart.git
-      path: package/inject
-      ref: 7c3cbf6
-
-  intl:
-
-  strings:
+  strings: ^0.1.4
