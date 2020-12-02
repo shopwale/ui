@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 import 'package:strings/strings.dart';
-import 'package:vendor/models/lib/catalog.dart';
+import 'catalog.dart';
 
 class Order {
   final int orderId;

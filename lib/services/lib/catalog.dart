@@ -1,5 +1,4 @@
-import 'package:vendor/models/lib/catalog.dart';
-
+import 'package:shared/models/lib/catalog.dart';
 import 'db.dart';
 
 class CatalogService {

@@ -1,5 +1,6 @@
-import 'package:flutter/foundation.dart';
-import 'package:vendor/services/lib/db.dart';
+import 'package:meta/meta.dart';
+
+import 'db.dart';
 
 class NotificationService {
   Future<void> addProviderFcmToken({

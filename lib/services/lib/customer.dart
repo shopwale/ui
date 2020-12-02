@@ -1,5 +1,5 @@
-import 'package:vendor/models/lib/customer.dart';
-import 'package:vendor/services/lib/db.dart';
+import 'package:shared/models/lib/customer.dart';
+import 'db.dart';
 
 class CustomerService {
   Future<Customer> getCustomerByMobileNumber(int mobileNumber) async {

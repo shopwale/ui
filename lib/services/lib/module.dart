@@ -1,9 +1,10 @@
 import 'package:inject/inject.dart';
-import 'package:vendor/services/lib/catalog.dart';
-import 'package:vendor/services/lib/customer.dart';
-import 'package:vendor/services/lib/notification.dart';
-import 'package:vendor/services/lib/order.dart';
-import 'package:vendor/services/lib/provider.dart';
+
+import 'catalog.dart';
+import 'customer.dart';
+import 'notification.dart';
+import 'order.dart';
+import 'provider.dart';
 
 @module
 class Services {
