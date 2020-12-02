@@ -1,10 +1,9 @@
 import 'package:inject/inject.dart';
-
-import 'catalog.dart';
-import 'customer.dart';
-import 'notification.dart';
-import 'order.dart';
-import 'provider.dart';
+import 'package:shared/services/lib/catalog.dart';
+import 'package:shared/services/lib/customer.dart';
+import 'package:shared/services/lib/notification.dart';
+import 'package:shared/services/lib/order.dart';
+import 'package:shared/services/lib/provider.dart';
 
 @module
 class Services {

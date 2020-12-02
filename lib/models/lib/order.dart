@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:strings/strings.dart';
-import 'catalog.dart';
+import 'package:shared/models/lib/catalog.dart';
 
 class Order {
   final int orderId;

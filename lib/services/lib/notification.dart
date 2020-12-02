@@ -1,6 +1,5 @@
 import 'package:meta/meta.dart';
-
-import 'db.dart';
+import 'package:shared/services/lib/db.dart';
 
 class NotificationService {
   Future<void> addProviderFcmToken({
