@@ -4,8 +4,6 @@ import 'package:shared/models/lib/catalog.dart';
 import 'package:shared/models/lib/order.dart';
 import 'package:shared/services/lib/db.dart';
 
-import '../../models/lib/order.dart';
-
 class OrderService {
   Future<List<Order>> getOrders(int serviceProviderId) async {
     // http://localshopwala.com:3001/getOrders?serviceProviderId=2

@@ -7,18 +7,18 @@ class Order {
   final Map<CatalogItem, ItemOrder> itemOrders = {};
   final int serviceProviderId;
   final int orderId;
-  final int customerId;
   final DateTime orderDate;
   OrderStatusEnum orderStatus;
   bool isDelivery;
-  final String customerName;
+  int customerId;
+  String customerName;
 
   Order({
-    @required this.orderId,
-    @required this.customerId,
-    @required this.orderDate,
-    @required this.orderStatus,
-    @required this.customerName,
+    this.orderId,
+    this.orderDate,
+    this.orderStatus,
+    this.customerName,
+    this.customerId,
     this.isDelivery = true,
     this.serviceProviderId,
   });
