@@ -4,6 +4,8 @@ import 'package:shared/models/lib/catalog.dart';
 import 'package:shared/models/lib/order.dart';
 import 'package:shared/services/lib/db.dart';
 
+import '../../models/lib/order.dart';
+
 class OrderService {
   Future<List<Order>> getOrders(int serviceProviderId) async {
     // http://localshopwala.com:3001/getOrders?serviceProviderId=2
@@ -35,6 +37,11 @@ class OrderService {
     final response = await dbClient.post(body: update.toMap());
     return OrderStatus.fromJson(response);
   }
+
+  Future<OrderStatus> placeOrder(Order order) async {
+    final response = await DbClient('order').post(body: order.toMap());
+    return OrderStatus.fromJson(response);
+  }
 }
 
 class FakeOrderService implements OrderService {
@@ -52,7 +59,6 @@ class FakeOrderService implements OrderService {
         orderDate: DateTime.now(),
         orderStatus: OrderStatusEnum.values[_rnd.nextInt(4)],
         isDelivery: _rnd.nextBool(),
-        totalPrice: (_rnd.nextInt(10) + 1) * 700.0,
         customerName: 'Vimal K',
       );
 
@@ -72,12 +78,17 @@ class FakeOrderService implements OrderService {
           unitOfMeasure: Unit.values[_rnd.nextInt(2)],
         ),
         quantity: _rnd.nextInt(11) + 1,
-        subTotalPrice: (_rnd.nextInt(10) + 1) * 100.0,
       );
 
   @override
   Future<OrderStatus> updateOrderStatus(OrderStatus update) =>
       Future.value(update);
+
+  @override
+  Future<OrderStatus> placeOrder(Order order) {
+    return Future.value(
+        OrderStatus(orderId: 1, status: OrderStatusEnum.accepted));
+  }
 }
 
 const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';

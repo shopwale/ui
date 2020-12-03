@@ -3,22 +3,24 @@ import 'package:strings/strings.dart';
 import 'package:shared/models/lib/catalog.dart';
 
 class Order {
+  /// Map from item id to item orders.
+  final Map<CatalogItem, ItemOrder> itemOrders = {};
+  final int serviceProviderId;
   final int orderId;
   final int customerId;
   final DateTime orderDate;
-  final double totalPrice;
   OrderStatusEnum orderStatus;
-  final bool isDelivery;
+  bool isDelivery;
   final String customerName;
 
   Order({
     @required this.orderId,
     @required this.customerId,
     @required this.orderDate,
-    @required this.totalPrice,
     @required this.orderStatus,
-    @required this.isDelivery,
     @required this.customerName,
+    this.isDelivery = true,
+    this.serviceProviderId,
   });
 
   Order.fromJson(Map<String, dynamic> json)
@@ -28,9 +30,42 @@ class Order {
           orderDate: DateTime.parse(json['orderDate']),
           orderStatus: toOrderStatusEnum(json['orderStatus']),
           isDelivery: json['isDeliver'],
-          totalPrice: json['totalPrice'].toDouble(),
           customerName: json['customerName'],
         );
+
+  ItemOrder addItemOrder(ItemOrder newOrder) {
+    if (itemOrders[newOrder.item] == null) {
+      itemOrders[newOrder.item] = newOrder;
+      return newOrder;
+    }
+
+    final existingItemOrder = itemOrders[newOrder.item];
+    final updatedItemOrder = ItemOrder(
+      item: newOrder.item,
+      quantity: existingItemOrder.quantity + newOrder.quantity,
+    );
+
+    return updatedItemOrder;
+  }
+
+  ItemOrder updateItemOrder(ItemOrder order) {
+    itemOrders[order.item] = order;
+    return order;
+  }
+
+  Map<String, dynamic> toMap() => {
+        'serviceProviderId': serviceProviderId,
+        'customerId': customerId,
+        'items': itemOrders.values
+            .where((i) => i.quantity != 0)
+            .map((i) => i.toMap())
+            .toList(),
+        'totalPrice': totalPrice,
+        'isDeliver': isDelivery,
+      };
+
+  double get totalPrice => itemOrders.values
+      .fold(0, (value, element) => value + element.subTotalPrice);
 }
 
 enum OrderStatusEnum {
@@ -74,20 +109,29 @@ OrderStatusEnum toOrderStatusEnum(String value) {
 }
 
 class ItemOrder {
-  final int quantity;
+  int _quantity;
   final CatalogItem item;
-  final double subTotalPrice;
 
   ItemOrder({
     @required this.item,
-    @required this.quantity,
-    @required this.subTotalPrice,
-  });
+    int quantity,
+  }) : _quantity = quantity ?? 0;
+
+  int get quantity => _quantity;
+
+  void decrement() {
+    _quantity--;
+  }
+
+  void increment() {
+    _quantity++;
+  }
+
+  double get subTotalPrice => _quantity * item.price;
 
   ItemOrder.fromJson(Map<String, dynamic> json)
       : this(
           quantity: json['quantity'],
-          subTotalPrice: json[''],
           item: CatalogItem(id: json['itemId']),
         );
 

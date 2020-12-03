@@ -36,22 +36,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.4"
-  inject:
-    dependency: "direct main"
-    description:
-      path: "package/inject"
-      ref: "7c3cbf6"
-      resolved-ref: "7c3cbf6a4da2bc8357152b9c7bbcb9891cbfa320"
-      url: "https://github.com/google/inject.dart.git"
-    source: git
-    version: "1.0.0-alpha"
-  intl:
-    dependency: "direct main"
-    description:
-      name: intl
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.16.1"
   lists:
     dependency: transitive
     description:
