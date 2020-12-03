@@ -2,10 +2,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:inject/inject.dart';
-import 'package:vendor/services/lib/catalog.dart';
-import 'package:vendor/services/lib/notification.dart';
-import 'package:vendor/services/lib/order.dart';
-import 'package:vendor/services/lib/provider.dart';
+import 'package:shared/services/lib/catalog.dart';
+import 'package:shared/services/lib/notification.dart';
+import 'package:shared/services/lib/order.dart';
+import 'package:shared/services/lib/provider.dart';
 import 'package:vendor/types/lib/inject.dart';
 import 'package:vendor/widgets/lib/current_orders.dart';
 

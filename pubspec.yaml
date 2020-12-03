@@ -43,6 +43,9 @@ dependencies:
 
   strings:
 
+  shared:
+    git: git@github.com:mikefrenil/shopwala-shared.git
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

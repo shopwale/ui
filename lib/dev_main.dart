@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inject/inject.dart';
-import 'package:vendor/services/lib/module.dart';
-import 'app.dart';
+import 'package:vendor/module.dart';
+import 'package:vendor/app.dart';
 import 'dev_main.inject.dart' as g;
 
 void main() async {

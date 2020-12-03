@@ -3,11 +3,11 @@ import 'package:inject/inject.dart';
 import 'package:intl/intl.dart';
 import 'package:strings/strings.dart';
 import 'package:vendor/common/lib/constants.dart';
-import 'package:vendor/models/lib/customer.dart';
-import 'package:vendor/models/lib/order.dart';
-import 'package:vendor/models/lib/catalog.dart';
-import 'package:vendor/services/lib/customer.dart';
-import 'package:vendor/services/lib/order.dart';
+import 'package:shared/models/lib/customer.dart';
+import 'package:shared/models/lib/order.dart';
+import 'package:shared/models/lib/catalog.dart';
+import 'package:shared/services/lib/customer.dart';
+import 'package:shared/services/lib/order.dart';
 import 'package:vendor/types/lib/inject.dart';
 
 @provide

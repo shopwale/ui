@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:inject/inject.dart';
+import 'package:shared/models/lib/catalog.dart';
+import 'package:shared/models/lib/order.dart';
+import 'package:shared/services/lib/customer.dart';
+import 'package:shared/services/lib/order.dart';
 import 'package:vendor/common/lib/constants.dart';
-import 'package:vendor/models/lib/catalog.dart';
-import 'package:vendor/models/lib/order.dart';
-import 'package:vendor/services/lib/customer.dart';
-import 'package:vendor/services/lib/order.dart';
 import 'package:vendor/types/lib/inject.dart';
 import 'package:vendor/widgets/lib/order_details.dart';
 import 'package:intl/intl.dart';
