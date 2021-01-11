@@ -5,6 +5,16 @@ import 'package:shared/models/lib/order.dart';
 import 'package:shared/services/lib/db.dart';
 
 class OrderService {
+  Future<List<Order>> getOrdersByCustomerId(int customerId) async {
+    // http://localshopwala.com:3000/getOrders?customerId=2
+    final dbClient = DbClient('getOrders', serverPort: 3001);
+    final orders = await dbClient.get(queryParams: {
+      'customerId': customerId.toString(),
+    });
+
+    return orders.map<Order>((orderJson) => Order.fromJson(orderJson)).toList();
+  }
+
   Future<List<Order>> getOrders(int serviceProviderId) async {
     // http://localshopwala.com:3001/getOrders?serviceProviderId=2
     final dbClient = DbClient('getOrders', serverPort: 3001);
@@ -43,6 +53,14 @@ class OrderService {
 }
 
 class FakeOrderService implements OrderService {
+  @override
+  Future<List<Order>> getOrdersByCustomerId(int _) => Future.value(
+        List.generate(
+          _rnd.nextInt(100),
+          (index) => createFakeOrder(index),
+        ),
+      );
+
   @override
   Future<List<Order>> getOrders(int serviceProviderId) => Future.value(
         List.generate(
