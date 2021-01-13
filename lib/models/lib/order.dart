@@ -104,8 +104,11 @@ extension OrderStatusEnumExtension on OrderStatusEnum {
 }
 
 OrderStatusEnum toOrderStatusEnum(String value) {
-  return OrderStatusEnum.values.firstWhere((e) =>
-      e.toString().toLowerCase() == 'orderstatusenum.${value.toLowerCase()}');
+  return OrderStatusEnum.values.firstWhere(
+    (e) =>
+        e.toString().toLowerCase() == 'orderstatusenum.${value.toLowerCase()}',
+    orElse: () => OrderStatusEnum.pending,
+  );
 }
 
 class ItemOrder {
