@@ -25,6 +25,6 @@ class Provider {
           // mobileNumber: json['serviceProviderMobileNumber'],
           // pinCode: json['serviceProviderPinCode'],
           address: json['serviceProviderAddress'],
-          tokens: List<String>.from(json['fcmTokens']),
+          tokens: List<String>.from(json['fcmTokens'] ?? []),
         );
 }
