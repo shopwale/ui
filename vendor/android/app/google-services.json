@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "987205452004",
+    "firebase_url": "https://local-shopwala.firebaseio.com",
+    "project_id": "local-shopwala",
+    "storage_bucket": "local-shopwala.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:987205452004:android:586d550f306f9dbd396cf1",
+        "android_client_info": {
+          "package_name": "com.local.customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "987205452004-6dkgf32oje8fgs3tg773rsm0kr2alg0f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvH_nBXXz9NvnKfZ1jOYqvTCEK0yvyKjY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "987205452004-6dkgf32oje8fgs3tg773rsm0kr2alg0f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "987205452004-8fvf30jse3om4vk6klvdkkos51inagdm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.local.vendor"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:987205452004:android:e80672c77361e165396cf1",
+        "android_client_info": {
+          "package_name": "com.local.vendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "987205452004-6dkgf32oje8fgs3tg773rsm0kr2alg0f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvH_nBXXz9NvnKfZ1jOYqvTCEK0yvyKjY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "987205452004-6dkgf32oje8fgs3tg773rsm0kr2alg0f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "987205452004-8fvf30jse3om4vk6klvdkkos51inagdm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.local.vendor"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
