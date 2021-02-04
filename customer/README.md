@@ -18,7 +18,7 @@ flutter run
 Use flutter from master release channel.
 
 ```sh
-flutter channel master
+flutter channel stable
 ```
 
 Watch for changes and auto-generate injector artifacts.
