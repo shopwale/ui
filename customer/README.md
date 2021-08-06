@@ -1,4 +1,4 @@
-# local
+# Customer App
 
 Flutter app to connect customers with local shops.
 
