@@ -436,10 +436,10 @@ packages:
   shared:
     dependency: "direct main"
     description:
-      path: "."
+      path: shared
       ref: HEAD
-      resolved-ref: ae0f3083a678c99ef9603ccf8b63322bf28297d6
-      url: "git@github.com:mikefrenil/shopwala-shared.git"
+      resolved-ref: e6daefc32f2f6ceca8462339eee5fce10a0292d6
+      url: "git@github.com:shopwale/ui.git"
     source: git
     version: "1.0.0+1"
   shelf:

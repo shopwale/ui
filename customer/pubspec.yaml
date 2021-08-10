@@ -44,7 +44,9 @@ dependencies:
   firebase_auth: "^0.18.4"
 
   shared:
-    git: git@github.com:mikefrenil/shopwala-shared.git
+    git:
+      url: git@github.com:shopwale/ui.git
+      path: shared
 
 dev_dependencies:
   flutter_test:
