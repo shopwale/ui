@@ -40,10 +40,9 @@ dependencies:
   intl:
 
   strings:
+
   shared:
-    git:
-      url: git@github.com:shopwale/ui.git
-      path: shared
+    path: ../shared/
 
 dev_dependencies:
   flutter_test:

@@ -15,11 +15,15 @@ class OrderService {
     return orders.map<Order>((orderJson) => Order.fromJson(orderJson)).toList();
   }
 
-  Future<List<Order>> getOrders(int serviceProviderId) async {
-    // http://localshopwala.com:3001/getOrders?serviceProviderId=2
+  Future<List<Order>> getOrders(
+    int serviceProviderId, {
+    int dateRange = 3,
+  }) async {
+    // http://localshopwala.com:3001/getOrders?serviceProviderId=2&dateRange=1
     final dbClient = DbClient('getOrders', serverPort: 3001);
     final orders = await dbClient.get(queryParams: {
       'serviceProviderId': serviceProviderId.toString(),
+      'dateRange': dateRange.toString(),
     });
 
     return orders.map<Order>((orderJson) => Order.fromJson(orderJson)).toList();
@@ -62,7 +66,11 @@ class FakeOrderService implements OrderService {
       );
 
   @override
-  Future<List<Order>> getOrders(int serviceProviderId) => Future.value(
+  Future<List<Order>> getOrders(
+    int serviceProviderId, {
+    int dateRange = 3,
+  }) =>
+      Future.value(
         List.generate(
           _rnd.nextInt(100),
           (index) => createFakeOrder(index),

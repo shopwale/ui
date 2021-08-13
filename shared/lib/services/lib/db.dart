@@ -8,7 +8,7 @@ class DbClient {
   DbClient(
     String servicePath, {
     serverPort = 3000,
-  }) : _serviceEndpoint = Uri.https(_serverHost, servicePath);
+  }) : _serviceEndpoint = Uri.https('$_serverHost:$serverPort', servicePath);
 
   Future<dynamic> get({Map<String, dynamic> queryParams}) async {
     final requestUri = _serviceEndpoint.replace(queryParameters: queryParams);

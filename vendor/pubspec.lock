@@ -432,11 +432,9 @@ packages:
   shared:
     dependency: "direct main"
     description:
-      path: shared
-      ref: HEAD
-      resolved-ref: "86f1fc31ddb299fec3c0e10caba68d9176a2c71a"
-      url: "git@github.com:shopwale/ui.git"
-    source: git
+      path: "../shared"
+      relative: true
+    source: path
     version: "1.0.0+1"
   shelf:
     dependency: transitive
