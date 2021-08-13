@@ -30,19 +30,16 @@ dependencies:
 
   http: ^0.12.2
 
-  firebase_messaging: ^7.0.3
+  firebase_core:
+  firebase_messaging: ^10.0.4
 
   # Dependency injection
-  inject:
-    git:
-      url: https://github.com/google/inject.dart.git
-      path: package/inject
-      ref: 7c3cbf6
+  injectable: 1.1.2
+  get_it:
 
   intl:
 
   strings:
-
   shared:
     git:
       url: git@github.com:shopwale/ui.git
@@ -53,11 +50,7 @@ dev_dependencies:
     sdk: flutter
 
   # Dependency injection
-  inject_generator:
-    git:
-      url: https://github.com/google/inject.dart.git
-      path: package/inject_generator
-      ref: 7c3cbf6
+  injectable_generator:
 
   # Code generation (used for injector)
   build_runner:

@@ -1,18 +1,38 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:inject/inject.dart';
-import 'package:vendor/module.dart';
+import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
 import 'package:vendor/app.dart';
-import 'main.inject.dart' as g;
+import 'package:shared/services/lib/catalog.dart';
+import 'package:shared/services/lib/customer.dart';
+import 'package:shared/services/lib/notification.dart';
+import 'package:shared/services/lib/order.dart';
+import 'package:shared/services/lib/provider.dart';
+
+import 'main.config.dart';
 
 void main() async {
-  final injector = await ProdInjector.create(new Services());
-  runApp(injector.app);
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  configureDependencies();
+  runApp(VendorApp());
 }
 
-@Injector(const [Services])
-abstract class ProdInjector {
-  @provide
-  VendorApp get app;
+final _getIt = GetIt.instance;
 
-  static final create = g.ProdInjector$Injector.create;
+@InjectableInit()
+void configureDependencies() => $initGetIt(_getIt);
+
+@module
+abstract class Services {
+  ProviderService provideProvideService() => ProviderService();
+
+  OrderService provideOrderService() => OrderService();
+
+  CatalogService provideCatalogService() => CatalogService();
+
+  CustomerService provideCustomerService() => CustomerService();
+
+  NotificationService provideNotificationService() => NotificationService();
 }

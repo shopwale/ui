@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:inject/inject.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared/models/lib/catalog.dart';
 import 'package:shared/models/lib/order.dart';
 import 'package:shared/models/lib/provider.dart';
 import 'package:local/widgets/lib/catalog_item.dart';
 import 'package:local/widgets/lib/checkout.dart';
 
-@provide
+@injectable
 class CatalogFactory {
   final CheckoutFactory _checkoutFactory;
 

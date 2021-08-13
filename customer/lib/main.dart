@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inject/inject.dart';
+import 'package:injectable/injectable.dart';
 import 'package:local/app.dart';
 import 'module.dart';
 import 'main.inject.dart' as g;
@@ -11,7 +11,7 @@ void main() async {
 
 @Injector(const [Services])
 abstract class ProdInjector {
-  @provide
+  @injectable
   LocalShopApp get app;
 
   static final create = g.ProdInjector$Injector.create;

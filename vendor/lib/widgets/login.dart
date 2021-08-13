@@ -1,32 +1,30 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:inject/inject.dart';
+import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared/services/lib/catalog.dart';
 import 'package:shared/services/lib/notification.dart';
 import 'package:shared/services/lib/order.dart';
 import 'package:shared/services/lib/provider.dart';
-import 'package:vendor/types/lib/inject.dart';
-import 'package:vendor/widgets/lib/current_orders.dart';
+import 'package:vendor/widgets/current_orders.dart';
 
-@provide
+@injectable
 class Login extends StatefulWidget {
-  final Provider<LoginState> stateProvider;
-
-  const Login(this.stateProvider);
+  const Login();
 
   @override
-  State<StatefulWidget> createState() => stateProvider();
+  State<Login> createState() => GetIt.instance<LoginState>();
 }
 
-@provide
+@injectable
 class LoginState extends State<Login> {
   final ProviderService providerService;
   final OrderService orderService;
   final CatalogService catalogService;
   final CurrentOrdersFactory currentOrdersFactory;
   final NotificationService notificationService;
-  final _firebaseMessaging = FirebaseMessaging();
+  final _firebaseMessaging = FirebaseMessaging.instance;
   int mobileNumber;
   String fcmToken;
 
@@ -40,24 +38,8 @@ class LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-      },
-    );
-    _firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(
-            sound: true, badge: true, alert: true, provisional: true));
-    _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
-    });
+    FirebaseMessaging.onMessage.listen(print);
+
     _firebaseMessaging.getToken().then((String token) {
       assert(token != null);
       fcmToken = token;

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:inject/inject.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared/models/lib/provider.dart';
 import 'package:shared/services/lib/catalog.dart';
 import 'package:local/widgets/lib/catalog.dart';
 
-@provide
+@injectable
 class ProviderCardFactory {
   final CatalogService _catalogService;
   final CatalogFactory _catalogFactory;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inject/inject.dart';
+import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:local/common/lib/constants.dart';
 import 'package:local/types/lib/inject.dart';
@@ -11,7 +11,7 @@ import 'package:shared/models/lib/catalog.dart';
 import 'package:shared/services/lib/customer.dart';
 import 'package:shared/services/lib/order.dart';
 
-@provide
+@injectable
 class OrderDetailsFactory {
   final Provider<OrderDetailsState> stateProvider;
 
@@ -57,7 +57,7 @@ class OrderDetails extends StatefulWidget {
   State<StatefulWidget> createState() => orderDetailsState;
 }
 
-@provide
+@injectable
 class OrderDetailsState extends State<OrderDetails> {
   final OrderService orderService;
   final CustomerService customerService;

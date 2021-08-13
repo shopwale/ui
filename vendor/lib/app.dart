@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:inject/inject.dart';
-import 'package:vendor/types/lib/inject.dart';
-import 'package:vendor/widgets/lib/login.dart';
+import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
+import 'package:vendor/widgets/login.dart';
 
-@provide
+@injectable
 class VendorApp extends StatelessWidget {
-  final Provider<Login> loginWidgetProvider;
-
-  const VendorApp(this.loginWidgetProvider);
+  const VendorApp();
 
   // This widget is the root of your application.
   @override
@@ -30,7 +28,7 @@ class VendorApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: loginWidgetProvider(),
+      home: GetIt.instance<Login>(),
     );
   }
 }

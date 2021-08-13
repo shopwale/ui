@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inject/inject.dart';
+import 'package:injectable/injectable.dart';
 import 'package:local/common/lib/constants.dart';
 import 'package:shared/models/lib/order.dart';
 import 'package:shared/models/lib/catalog.dart';
@@ -7,7 +7,7 @@ import 'package:shared/services/lib/customer.dart';
 import 'package:shared/services/lib/order.dart';
 import 'package:local/widgets/lib/order_confirmation_dialog.dart';
 
-@provide
+@injectable
 class CheckoutFactory {
   final OrderService orderService;
   final CustomerService customerService;

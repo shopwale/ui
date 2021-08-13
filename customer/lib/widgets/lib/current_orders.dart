@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:inject/inject.dart';
+import 'package:injectable/injectable.dart';
 import 'package:local/common/lib/constants.dart';
 import 'package:local/types/lib/inject.dart';
 import 'package:local/widgets/lib/order_details.dart';
@@ -10,7 +10,7 @@ import 'package:shared/services/lib/customer.dart';
 import 'package:shared/services/lib/order.dart';
 import 'package:intl/intl.dart';
 
-@provide
+@injectable
 class CurrentOrdersFactory {
   final Provider<CurrentOrdersState> stateProvider;
 
@@ -33,7 +33,7 @@ class CurrentOrders extends StatefulWidget {
   State<StatefulWidget> createState() => state;
 }
 
-@provide
+@injectable
 class CurrentOrdersState extends State<CurrentOrders> {
   final OrderService orderService;
   final CustomerService customerService;

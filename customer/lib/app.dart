@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:inject/inject.dart';
+import 'package:injectable/injectable.dart';
 import 'package:local/widgets/lib/category_list.dart';
 
-@provide
+@injectable
 class LocalShopApp extends StatelessWidget {
   final CategoryListFactory _categoryListFactory;
   LocalShopApp(this._categoryListFactory);

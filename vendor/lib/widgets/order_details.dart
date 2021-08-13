@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:inject/inject.dart';
+import 'package:get_it/get_it.dart';
+import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:strings/strings.dart';
-import 'package:vendor/common/lib/constants.dart';
+import 'package:vendor/common/constants.dart';
 import 'package:shared/models/lib/customer.dart';
 import 'package:shared/models/lib/order.dart';
 import 'package:shared/models/lib/catalog.dart';
 import 'package:shared/services/lib/customer.dart';
 import 'package:shared/services/lib/order.dart';
-import 'package:vendor/types/lib/inject.dart';
 
-@provide
+@injectable
 class OrderDetailsFactory {
-  final Provider<OrderDetailsState> stateProvider;
-
-  OrderDetailsFactory(this.stateProvider);
+  const OrderDetailsFactory();
 
   OrderDetails create({
     Key key,
@@ -24,7 +22,7 @@ class OrderDetailsFactory {
     @required List<CatalogItem> catalogItems,
   }) =>
       OrderDetails(
-        stateProvider(),
+        GetIt.instance<OrderDetailsState>(),
         itemOrders: itemOrders,
         order: order,
         customer: customer,
@@ -52,7 +50,7 @@ class OrderDetails extends StatefulWidget {
   State<StatefulWidget> createState() => orderDetailsState;
 }
 
-@provide
+@injectable
 class OrderDetailsState extends State<OrderDetails> {
   final OrderService orderService;
   final CustomerService customerService;

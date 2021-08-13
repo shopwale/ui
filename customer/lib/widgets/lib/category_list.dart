@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:inject/inject.dart';
+import 'package:injectable/injectable.dart';
 import 'package:local/widgets/lib/current_orders.dart';
 import 'package:shared/models/lib/category.dart';
 import 'package:shared/services/lib/category.dart';
 
 import 'category_card.dart';
 
-@provide
+@injectable
 class CategoryListFactory {
   final CategoryService _categoryService;
   final CategoryCardFactory _cardFactory;

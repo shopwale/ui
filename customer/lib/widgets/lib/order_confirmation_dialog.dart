@@ -1,7 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:inject/inject.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared/models/lib/order.dart';
 import 'package:shared/services/lib/customer.dart';
 import 'package:shared/services/lib/notification.dart';
@@ -10,7 +10,7 @@ import 'package:local/types/lib/inject.dart';
 
 import 'order_status.dart';
 
-@provide
+@injectable
 class OrderConfirmationDialogFactory {
   final Provider<OrderConfirmationDialogState> stateProvider;
 
@@ -36,7 +36,7 @@ class OrderConfirmationDialog extends StatefulWidget {
   State<StatefulWidget> createState() => orderConfirmationDialogState;
 }
 
-@provide
+@injectable
 class OrderConfirmationDialogState extends State<OrderConfirmationDialog> {
   final CustomerService customerService;
   final OrderService orderService;
