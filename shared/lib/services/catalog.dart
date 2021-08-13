@@ -1,5 +1,5 @@
-import 'package:shared/models/lib/catalog.dart';
-import 'package:shared/services/lib/db.dart';
+import 'package:shared/models/catalog.dart';
+import 'package:shared/services/db.dart';
 
 class CatalogService {
   final DbClient _dbClient;

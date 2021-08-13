@@ -6,11 +6,11 @@
 
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
-import 'package:shared/services/lib/catalog.dart' as _i3;
-import 'package:shared/services/lib/customer.dart' as _i5;
-import 'package:shared/services/lib/notification.dart' as _i7;
-import 'package:shared/services/lib/order.dart' as _i9;
-import 'package:shared/services/lib/provider.dart' as _i10;
+import 'package:shared/services/catalog.dart' as _i3;
+import 'package:shared/services/customer.dart' as _i5;
+import 'package:shared/services/notification.dart' as _i7;
+import 'package:shared/services/order.dart' as _i9;
+import 'package:shared/services/provider.dart' as _i10;
 
 import 'app.dart' as _i11;
 import 'main.dart' as _i12;

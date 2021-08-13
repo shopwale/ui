@@ -7,12 +7,12 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:local/app.dart';
-import 'package:shared/services/lib/catalog.dart';
+import 'package:shared/services/catalog.dart';
 
-import 'package:shared/services/lib/category.dart';
-import 'package:shared/services/lib/customer.dart';
-import 'package:shared/services/lib/order.dart';
-import 'package:shared/services/lib/provider.dart';
+import 'package:shared/services/category.dart';
+import 'package:shared/services/customer.dart';
+import 'package:shared/services/order.dart';
+import 'package:shared/services/provider.dart';
 import 'package:local/widgets/lib/catalog.dart';
 import 'package:local/widgets/lib/category_card.dart';
 import 'package:local/widgets/lib/category_list.dart';

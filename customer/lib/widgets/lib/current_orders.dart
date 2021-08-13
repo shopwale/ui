@@ -5,9 +5,9 @@ import 'package:injectable/injectable.dart';
 import 'package:local/common/lib/constants.dart';
 import 'package:local/types/lib/inject.dart';
 import 'package:local/widgets/lib/order_details.dart';
-import 'package:shared/models/lib/order.dart';
-import 'package:shared/services/lib/customer.dart';
-import 'package:shared/services/lib/order.dart';
+import 'package:shared/models/order.dart';
+import 'package:shared/services/customer.dart';
+import 'package:shared/services/order.dart';
 import 'package:intl/intl.dart';
 
 @injectable

@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:shared/models/lib/catalog.dart';
-import 'package:shared/models/lib/order.dart';
-import 'package:shared/services/lib/db.dart';
+import 'package:shared/models/catalog.dart';
+import 'package:shared/models/order.dart';
+import 'package:shared/services/db.dart';
 
 class OrderService {
   Future<List<Order>> getOrdersByCustomerId(int customerId) async {

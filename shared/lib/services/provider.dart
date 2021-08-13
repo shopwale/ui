@@ -1,5 +1,5 @@
-import 'package:shared/models/lib/provider.dart';
-import 'package:shared/services/lib/db.dart';
+import 'package:shared/models/provider.dart';
+import 'package:shared/services/db.dart';
 
 class ProviderService {
   Future<Provider> getServiceProviderInfo(int mobileNumber) async {

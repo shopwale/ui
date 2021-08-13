@@ -4,11 +4,11 @@ import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:strings/strings.dart';
 import 'package:vendor/common/constants.dart';
-import 'package:shared/models/lib/customer.dart';
-import 'package:shared/models/lib/order.dart';
-import 'package:shared/models/lib/catalog.dart';
-import 'package:shared/services/lib/customer.dart';
-import 'package:shared/services/lib/order.dart';
+import 'package:shared/models/customer.dart';
+import 'package:shared/models/order.dart';
+import 'package:shared/models/catalog.dart';
+import 'package:shared/services/customer.dart';
+import 'package:shared/services/order.dart';
 
 @injectable
 class OrderDetailsFactory {
@@ -218,6 +218,7 @@ class OrderDetailsState extends State<OrderDetails> {
           SizedBox(width: 16.0),
           Text(
             data,
+            softWrap: true,
             style: TextStyle(
               fontSize: Theme.of(context).textTheme.headline6.fontSize,
             ),

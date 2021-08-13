@@ -2,10 +2,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shared/models/lib/order.dart';
-import 'package:shared/services/lib/customer.dart';
-import 'package:shared/services/lib/notification.dart';
-import 'package:shared/services/lib/order.dart';
+import 'package:shared/models/order.dart';
+import 'package:shared/services/customer.dart';
+import 'package:shared/services/notification.dart';
+import 'package:shared/services/order.dart';
 import 'package:local/types/lib/inject.dart';
 
 import 'order_status.dart';

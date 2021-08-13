@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local/common/lib/constants.dart';
-import 'package:shared/models/lib/catalog.dart';
-import 'package:shared/models/lib/order.dart';
+import 'package:shared/models/catalog.dart';
+import 'package:shared/models/order.dart';
 
 class CatalogItemTile extends StatefulWidget {
   final CatalogItem catalogItem;

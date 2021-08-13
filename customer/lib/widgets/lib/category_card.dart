@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shared/models/lib/category.dart';
-import 'package:shared/services/lib/provider.dart';
+import 'package:shared/models/category.dart';
+import 'package:shared/services/provider.dart';
 import 'package:local/widgets/lib/provider_list.dart';
 
 @injectable

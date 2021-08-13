@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shared/models/lib/catalog.dart';
-import 'package:shared/models/lib/order.dart';
-import 'package:shared/models/lib/provider.dart';
+import 'package:shared/models/catalog.dart';
+import 'package:shared/models/order.dart';
+import 'package:shared/models/provider.dart';
 import 'package:local/widgets/lib/catalog_item.dart';
 import 'package:local/widgets/lib/checkout.dart';
 

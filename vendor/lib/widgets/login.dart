@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shared/services/lib/catalog.dart';
-import 'package:shared/services/lib/notification.dart';
-import 'package:shared/services/lib/order.dart';
-import 'package:shared/services/lib/provider.dart';
+import 'package:shared/services/catalog.dart';
+import 'package:shared/services/notification.dart';
+import 'package:shared/services/order.dart';
+import 'package:shared/services/provider.dart';
 import 'package:vendor/widgets/current_orders.dart';
 
 @injectable
@@ -34,10 +34,7 @@ class LoginState extends State<Login> {
     this.currentOrdersFactory,
     this.catalogService,
     this.notificationService,
-  );
-
-  @override
-  Widget build(BuildContext context) {
+  ) {
     FirebaseMessaging.onMessage.listen(print);
 
     _firebaseMessaging.getToken().then((String token) {
@@ -45,7 +42,10 @@ class LoginState extends State<Login> {
       fcmToken = token;
       print('Push Messaging token: $token');
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text('Get Started')),
         body: Container(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:local/widgets/lib/current_orders.dart';
-import 'package:shared/models/lib/category.dart';
-import 'package:shared/services/lib/category.dart';
+import 'package:shared/models/category.dart';
+import 'package:shared/services/category.dart';
 
 import 'category_card.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared/models/lib/order.dart';
+import 'package:shared/models/order.dart';
 
 class OrderStatusWidget extends StatelessWidget {
   final OrderStatus orderStatus;

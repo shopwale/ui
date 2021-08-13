@@ -3,13 +3,13 @@ import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 import 'package:local/common/lib/constants.dart';
 import 'package:local/types/lib/inject.dart';
-import 'package:shared/services/lib/catalog.dart';
+import 'package:shared/services/catalog.dart';
 import 'package:strings/strings.dart';
-import 'package:shared/models/lib/customer.dart';
-import 'package:shared/models/lib/order.dart';
-import 'package:shared/models/lib/catalog.dart';
-import 'package:shared/services/lib/customer.dart';
-import 'package:shared/services/lib/order.dart';
+import 'package:shared/models/customer.dart';
+import 'package:shared/models/order.dart';
+import 'package:shared/models/catalog.dart';
+import 'package:shared/services/customer.dart';
+import 'package:shared/services/order.dart';
 
 @injectable
 class OrderDetailsFactory {

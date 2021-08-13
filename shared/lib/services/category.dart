@@ -1,4 +1,4 @@
-import 'package:shared/models/lib/category.dart';
+import 'package:shared/models/category.dart';
 
 /// Service that fetches the list of provider categories.
 abstract class CategoryService {

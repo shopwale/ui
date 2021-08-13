@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:strings/strings.dart';
-import 'package:shared/models/lib/catalog.dart';
+import 'package:shared/models/catalog.dart';
 
 class Order {
   /// Map from item id to item orders.
@@ -24,6 +24,15 @@ class Order {
   });
 
   Order.fromJson(Map<String, dynamic> json)
+      // {
+      //    "orderId":303,
+      //    "customerId":4,
+      //    "customerName":"AsifIqbalNavalur ",
+      //    "orderDate":"2021-08-13T22:09:46.681Z",
+      //    "totalPrice":51,
+      //    "orderStatus":"Cancelled",
+      //    "isDeliver":fals
+      // }
       : this(
           customerId: json['customerId'],
           orderId: json['orderId'],
