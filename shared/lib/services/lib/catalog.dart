@@ -7,7 +7,7 @@ class CatalogService {
   CatalogService() : _dbClient = DbClient('getItems');
 
   Future<List<CatalogItem>> byProviderId(int id) async {
-    // http://localshopwala.com:3000/getItems?serviceprovider=2
+    // http://localgenie.in:3000/getItems?serviceprovider=2
     final List itemsJson = await _dbClient.get(queryParams: {
       'serviceProviderId': id.toString(),
     });

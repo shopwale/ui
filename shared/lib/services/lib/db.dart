@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class DbClient {
-  static final _serverHost = 'localshopwala.com';
+  static final _serverHost = 'localgenie.in';
   final Uri _serviceEndpoint;
 
   DbClient(

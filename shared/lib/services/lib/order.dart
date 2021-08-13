@@ -6,7 +6,7 @@ import 'package:shared/services/lib/db.dart';
 
 class OrderService {
   Future<List<Order>> getOrdersByCustomerId(int customerId) async {
-    // http://localshopwala.com:3000/getOrders?customerId=2
+    // http://localgenie.in:3000/getOrders?customerId=2
     final dbClient = DbClient('getOrders');
     final orders = await dbClient.get(queryParams: {
       'customerId': customerId.toString(),
@@ -19,7 +19,7 @@ class OrderService {
     int serviceProviderId, {
     int dateRange = 3,
   }) async {
-    // http://localshopwala.com:3001/getOrders?serviceProviderId=2&dateRange=1
+    // http://localgenie.in:3001/getOrders?serviceProviderId=2&dateRange=1
     final dbClient = DbClient('getOrders', serverPort: 3001);
     final orders = await dbClient.get(queryParams: {
       'serviceProviderId': serviceProviderId.toString(),
@@ -30,7 +30,7 @@ class OrderService {
   }
 
   Future<List<ItemOrder>> getOrderDetails(int orderId) async {
-    // http://localshopwala.com:3001/getOrderDetails?orderId=13
+    // http://localgenie.in:3001/getOrderDetails?orderId=13
     final dbClient = DbClient('getOrderDetails', serverPort: 3001);
     final response = await dbClient.get(queryParams: {
       'orderId': orderId.toString(),
@@ -43,7 +43,7 @@ class OrderService {
   }
 
   Future<OrderStatus> updateOrderStatus(OrderStatus update) async {
-    // http://localshopwala.com:3001/updateOrderStatus
+    // http://localgenie.in:3001/updateOrderStatus
     // payload: {"orderId":2,"orderStatus":"Pending"}
     final dbClient = DbClient('updateOrderStatus', serverPort: 3001);
     final response = await dbClient.post(body: update.toMap());

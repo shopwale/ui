@@ -24,6 +24,6 @@ class Customer {
           customerName: json['customerName'],
           pinCode: json['pinCode'],
           address: json['address'],
-          tokens: List<String>.from(json['fcmTokens']),
+          tokens: List<String>.from(json['fcmTokens'] ?? []),
         );
 }

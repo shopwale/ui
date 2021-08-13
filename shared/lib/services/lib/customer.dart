@@ -10,7 +10,7 @@ class CustomerService {
   }
 
   Future<Customer> getCustomerById(int id) async {
-    // http://localshopwala.com:3001/getCustomerInfo?customerId=1
+    // http://localgenie.in:3001/getCustomerInfo?customerId=1
     final response =
         await DbClient('getCustomerInfo', serverPort: 3001).get(queryParams: {
       'customerId': id.toString(),
