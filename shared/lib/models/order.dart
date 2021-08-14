@@ -12,6 +12,7 @@ class Order {
   bool isDelivery;
   int customerId;
   String customerName;
+  double totalPrice;
 
   Order({
     this.orderId,
@@ -21,18 +22,10 @@ class Order {
     this.customerId,
     this.isDelivery = true,
     this.serviceProviderId,
+    this.totalPrice,
   });
 
   Order.fromJson(Map<String, dynamic> json)
-      // {
-      //    "orderId":303,
-      //    "customerId":4,
-      //    "customerName":"AsifIqbalNavalur ",
-      //    "orderDate":"2021-08-13T22:09:46.681Z",
-      //    "totalPrice":51,
-      //    "orderStatus":"Cancelled",
-      //    "isDeliver":fals
-      // }
       : this(
           customerId: json['customerId'],
           orderId: json['orderId'],
@@ -40,6 +33,7 @@ class Order {
           orderStatus: toOrderStatusEnum(json['orderStatus']),
           isDelivery: json['isDeliver'],
           customerName: json['customerName'],
+          totalPrice: (json['totalPrice'] as num).toDouble(),
         );
 
   ItemOrder addItemOrder(ItemOrder newOrder) {
@@ -72,9 +66,6 @@ class Order {
         'totalPrice': totalPrice,
         'isDeliver': isDelivery,
       };
-
-  double get totalPrice => itemOrders.values
-      .fold(0, (value, element) => value + element.subTotalPrice);
 }
 
 enum OrderStatusEnum {

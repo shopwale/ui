@@ -216,11 +216,13 @@ class OrderDetailsState extends State<OrderDetails> {
         children: [
           _buildLabel(context, label),
           SizedBox(width: 16.0),
-          Text(
-            data,
-            softWrap: true,
-            style: TextStyle(
-              fontSize: Theme.of(context).textTheme.headline6.fontSize,
+          Flexible(
+            child: Text(
+              data,
+              softWrap: true,
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.headline6.fontSize,
+              ),
             ),
           ),
         ],
