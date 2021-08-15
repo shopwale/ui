@@ -67,12 +67,15 @@ class CurrentOrdersState extends State<CurrentOrders> {
   @override
   void initState() {
     super.initState();
-    _fetchOrdersAndUpdateState(null);
+    _fetchOrdersAndUpdateState();
 
-    _timer = Timer.periodic(Duration(minutes: 1), _fetchOrdersAndUpdateState);
+    _timer = Timer.periodic(
+      Duration(minutes: 1),
+      (_) => _fetchOrdersAndUpdateState(),
+    );
   }
 
-  Future<void> _fetchOrdersAndUpdateState(_) async {
+  Future<void> _fetchOrdersAndUpdateState() async {
     orders = await orderService.getOrders(widget.serviceProviderId);
     setState(() {
       _updateVisibleOrders();
@@ -81,8 +84,8 @@ class CurrentOrdersState extends State<CurrentOrders> {
 
   @override
   void dispose() {
-    super.dispose();
     _timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -90,8 +93,19 @@ class CurrentOrdersState extends State<CurrentOrders> {
     final DateFormat formatter = DateFormat('hh:mm, dd MMM');
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Your Orders'),
+      appBar: AppBar(title: Text('Your Orders')),
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          color: Theme.of(context).accentColor,
+        ),
+        child: IconButton(
+          icon: Icon(
+            Icons.refresh,
+            color: Theme.of(context).accentTextTheme.subtitle1.color,
+          ),
+          onPressed: () => _refreshOrders(context),
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,9 +115,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
           _buildTypeFilters(),
           Flexible(
             child: RefreshIndicator(
-              onRefresh: () async {
-                await _fetchOrdersAndUpdateState(null);
-              },
+              onRefresh: _fetchOrdersAndUpdateState,
               child: ListView(
                 children: visibleOrders
                     .map(
@@ -161,6 +173,21 @@ class CurrentOrdersState extends State<CurrentOrders> {
         ],
       ),
     );
+  }
+
+  Future<void> _refreshOrders(BuildContext context) async {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => Center(
+          child: RefreshProgressIndicator(key: Key('LoadingOverlay')),
+        ),
+      ),
+    );
+    try {
+      await _fetchOrdersAndUpdateState();
+    } finally {
+      Navigator.of(context).pop();
+    }
   }
 
   Widget _buildStatusFilters() {
