@@ -90,8 +90,6 @@ class CurrentOrdersState extends State<CurrentOrders> {
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat formatter = DateFormat('hh:mm, dd MMM');
-
     return Scaffold(
       appBar: AppBar(title: Text('Your Orders')),
       floatingActionButton: Container(
@@ -118,60 +116,70 @@ class CurrentOrdersState extends State<CurrentOrders> {
               onRefresh: _fetchOrdersAndUpdateState,
               child: ListView(
                 children: visibleOrders
-                    .map(
-                      (o) => GestureDetector(
-                        onTap: () async {
-                          final details = await Future.wait([
-                            orderService.getOrderDetails(o.orderId),
-                            customerService.getCustomerById(o.customerId),
-                          ]);
-
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => orderDetailsFactory.create(
-                                order: o,
-                                itemOrders: details[0],
-                                customer: details[1],
-                                catalogItems: widget.catalogItems,
-                              ),
-                            ),
-                          );
-                        },
-                        child: Card(
-                          key: Key(o.orderId.toString()),
-                          child: Column(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.only(top: 16.0, left: 16.0),
-                                alignment: Alignment.topLeft,
-                                child: Text(formatter.format(o.orderDate)),
-                              ),
-                              ListTile(
-                                leading: Icon(
-                                  o.isDelivery
-                                      ? Icons.delivery_dining
-                                      : Icons.shopping_bag,
-                                  color: o.isDelivery
-                                      ? Theme.of(context).accentColor
-                                      : Theme.of(context)
-                                          .accentColor
-                                          .withOpacity(0.5),
-                                ),
-                                title: Text('${o.customerName}'),
-                                subtitle: Text('${o.orderStatus.asString()}'),
-                                trailing: Text('$rupeeSymbol ${o.totalPrice}'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
+                    .map((order) => _orderTile(order, context))
                     .toList(),
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  GestureDetector _orderTile(Order order, BuildContext context) {
+    final DateFormat formatter = DateFormat('hh:mm, dd MMM');
+
+    return GestureDetector(
+      onTap: () => _openOrderDetails(order, context),
+      child: Card(
+        key: Key(order.orderId.toString()),
+        child: Column(
+          children: [
+            _orderDate(formatter, order),
+            ListTile(
+              leading: _orderTypeIcon(order, context),
+              title: Text('${order.customerName}'),
+              subtitle: Text('${order.orderStatus.asString()}'),
+              trailing: Text('$rupeeSymbol ${order.totalPrice}'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container _orderDate(DateFormat formatter, Order order) {
+    return Container(
+      padding: EdgeInsets.only(top: 16.0, left: 16.0),
+      alignment: Alignment.topLeft,
+      child: Text(formatter.format(order.orderDate)),
+    );
+  }
+
+  Future _openOrderDetails(Order order, BuildContext context) async {
+    final details = await Future.wait([
+      orderService.getOrderDetails(order.orderId),
+      customerService.getCustomerById(order.customerId),
+    ]);
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => orderDetailsFactory.create(
+          order: order,
+          itemOrders: details[0],
+          customer: details[1],
+          catalogItems: widget.catalogItems,
+        ),
+      ),
+    );
+  }
+
+  Icon _orderTypeIcon(Order o, BuildContext context) {
+    return Icon(
+      o.isDelivery ? Icons.delivery_dining : Icons.shopping_bag,
+      color: o.isDelivery
+          ? Theme.of(context).accentColor
+          : Theme.of(context).accentColor.withOpacity(0.5),
     );
   }
 
