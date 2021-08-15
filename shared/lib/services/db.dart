@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:developer';
 
 class DbClient {
   static final _serverHost = 'localgenie.in';
@@ -12,6 +13,7 @@ class DbClient {
 
   Future<dynamic> get({Map<String, dynamic> queryParams}) async {
     final requestUri = _serviceEndpoint.replace(queryParameters: queryParams);
+    log('requestUri($requestUri)');
     final response = await http.get(requestUri);
     if (response.statusCode == 200) {
       return json.decode(response.body);

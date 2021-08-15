@@ -22,17 +22,22 @@ void main() async {
 final _getIt = GetIt.instance;
 
 @InjectableInit()
-void configureDependencies() => $initGetIt(_getIt);
+void configureDependencies() => $initGetIt(_getIt, environment: prod.name);
 
 @module
-abstract class Services {
+abstract class ProdServices {
+  @prod
   ProviderService provideProvideService() => ProviderService();
 
+  @prod
   OrderService provideOrderService() => OrderService();
 
+  @prod
   CatalogService provideCatalogService() => CatalogService();
 
+  @prod
   CustomerService provideCustomerService() => CustomerService();
 
+  @prod
   NotificationService provideNotificationService() => NotificationService();
 }
