@@ -76,7 +76,10 @@ class CurrentOrdersState extends State<CurrentOrders> {
   }
 
   Future<void> _fetchOrdersAndUpdateState() async {
-    orders = await orderService.getOrders(widget.serviceProviderId);
+    orders = await orderService.getOrders(
+      widget.serviceProviderId,
+      fromDate: DateTime.now().subtract(Duration(days: 3)),
+    );
     setState(() {
       _updateVisibleOrders();
     });

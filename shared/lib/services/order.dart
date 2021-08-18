@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:meta/meta.dart';
 import 'package:shared/models/catalog.dart';
 import 'package:shared/models/order.dart';
 import 'package:shared/services/db.dart';
+import 'package:intl/intl.dart';
 
 class OrderService {
   Future<List<Order>> getOrdersByCustomerId(int customerId) async {
@@ -15,15 +17,21 @@ class OrderService {
     return orders.map<Order>((orderJson) => Order.fromJson(orderJson)).toList();
   }
 
+  // last 1, 2, 3, 5, 10, 15
+
   Future<List<Order>> getOrders(
     int serviceProviderId, {
-    int dateRange = 3,
+    @required DateTime fromDate,
+    DateTime toDate,
   }) async {
-    // http://localgenie.in:3001/getOrders?serviceProviderId=2&dateRange=1
+    final DateFormat formatter = DateFormat('yyyy-M-d');
+
+    // http://localgenie.in:3001/getOrders?serviceProviderId=2&dateRange=custom~2021-02-10:2021-08-10
     final dbClient = DbClient('getOrders', serverPort: 3001);
     final orders = await dbClient.get(queryParams: {
       'serviceProviderId': serviceProviderId.toString(),
-      'dateRange': dateRange.toString(),
+      'dateRange': 'custom~${formatter.format(fromDate)}'
+          ':${formatter.format(toDate ?? DateTime.now())}',
     });
 
     return orders.map<Order>((orderJson) => Order.fromJson(orderJson)).toList();
@@ -68,7 +76,8 @@ class FakeOrderService implements OrderService {
   @override
   Future<List<Order>> getOrders(
     int serviceProviderId, {
-    int dateRange = 3,
+    @required DateTime fromDate,
+    DateTime toDate,
   }) =>
       Future.value(
         List.generate(
