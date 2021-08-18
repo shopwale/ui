@@ -75,10 +75,10 @@ class CurrentOrdersState extends State<CurrentOrders> {
     );
   }
 
-  Future<void> _fetchOrdersAndUpdateState() async {
+  Future<void> _fetchOrdersAndUpdateState({int numberOfDays = 3}) async {
     orders = await orderService.getOrders(
       widget.serviceProviderId,
-      fromDate: DateTime.now().subtract(Duration(days: 3)),
+      fromDate: DateTime.now().subtract(Duration(days: numberOfDays)),
     );
     setState(() {
       _updateVisibleOrders();
@@ -114,6 +114,21 @@ class CurrentOrdersState extends State<CurrentOrders> {
           SizedBox(height: 8.0),
           _buildStatusFilters(),
           _buildTypeFilters(),
+          DropdownButton(
+            value: 3,
+            items: [1, 2, 3, 5, 10, 15]
+                .map(
+                  (e) => DropdownMenuItem(
+                    key: Key('$e'),
+                    value: e,
+                    child: Text('last $e day(s)'),
+                  ),
+                )
+                .toList(),
+            onChanged: (value) {
+              _fetchOrdersAndUpdateState(numberOfDays: value);
+            },
+          ),
           Flexible(
             child: RefreshIndicator(
               onRefresh: _fetchOrdersAndUpdateState,
