@@ -7,6 +7,7 @@ import 'package:shared/models/catalog.dart';
 import 'package:shared/models/order.dart';
 import 'package:shared/services/customer.dart';
 import 'package:shared/services/order.dart';
+import 'package:strings/strings.dart';
 import 'package:vendor/common/constants.dart';
 import 'package:vendor/widgets/order_details.dart';
 import 'package:intl/intl.dart';
@@ -108,44 +109,47 @@ class CurrentOrdersState extends State<CurrentOrders> {
           onPressed: () => _refreshOrders(context),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 8.0),
-          _buildStatusFilters(),
-          _buildTypeFilters(),
-          DropdownButton(
-            value: 3,
-            items: [1, 2, 3, 5, 10, 15]
-                .map(
-                  (e) => DropdownMenuItem(
-                    key: Key('$e'),
-                    value: e,
-                    child: Text('last $e day(s)'),
-                  ),
-                )
-                .toList(),
-            onChanged: (value) {
-              _fetchOrdersAndUpdateState(numberOfDays: value);
-            },
-          ),
-          Flexible(
-            child: RefreshIndicator(
-              onRefresh: _fetchOrdersAndUpdateState,
-              child: ListView(
-                children: visibleOrders
-                    .map((order) => _orderTile(order, context))
-                    .toList(),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 8.0),
+            _buildStatusFilters(),
+            _buildTypeFilters(),
+            DropdownButton(
+              value: 3,
+              items: [1, 2, 3, 5, 10, 15]
+                  .map(
+                    (e) => DropdownMenuItem(
+                      key: Key('$e'),
+                      value: e,
+                      child: Text('last $e day(s)'),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                _fetchOrdersAndUpdateState(numberOfDays: value);
+              },
+            ),
+            Flexible(
+              child: RefreshIndicator(
+                onRefresh: _fetchOrdersAndUpdateState,
+                child: ListView(
+                  children: visibleOrders
+                      .map((order) => _orderTile(order, context))
+                      .toList(),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   GestureDetector _orderTile(Order order, BuildContext context) {
-    final DateFormat formatter = DateFormat('hh:mm, dd MMM');
+    final formatter = DateFormat('hh:mm, dd MMM');
 
     return GestureDetector(
       onTap: () => _openOrderDetails(order, context),
@@ -155,9 +159,16 @@ class CurrentOrdersState extends State<CurrentOrders> {
           children: [
             _orderDate(formatter, order),
             ListTile(
+              isThreeLine: true,
               leading: _orderTypeIcon(order, context),
-              title: Text('${order.customerName}'),
-              subtitle: Text('${order.orderStatus.asString()}'),
+              title: Text('${order.customerName.trim()}'),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Order    #${order.orderId}'),
+                  Text('Status   ${capitalize(order.orderStatus.asString())}'),
+                ],
+              ),
               trailing: Text('$rupeeSymbol ${order.totalPrice}'),
             ),
           ],
@@ -217,33 +228,30 @@ class CurrentOrdersState extends State<CurrentOrders> {
   }
 
   Widget _buildStatusFilters() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      child: Wrap(
-        spacing: 8.0,
-        children: [
-          Container(
-            margin: EdgeInsets.only(top: 16.0),
-            child: Text('status:'),
-          ),
-          ChoiceChip(
-            label: Text('all'),
-            selected: statusesToFilter.isEmpty,
-            onSelected: (selected) {
-              if (selected) {
-                setState(() {
-                  statusesToFilter = <OrderStatusEnum>{};
-                  _updateVisibleOrders();
-                });
-              }
-            },
-          ),
-          _buildStatusFilter(OrderStatusEnum.pending),
-          _buildStatusFilter(OrderStatusEnum.rejected),
-          _buildStatusFilter(OrderStatusEnum.accepted),
-          // _buildStatusFilter(OrderStatusEnum.completed),
-        ],
-      ),
+    return Wrap(
+      spacing: 8.0,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 16.0),
+          child: Text('status:'),
+        ),
+        ChoiceChip(
+          label: Text('all'),
+          selected: statusesToFilter.isEmpty,
+          onSelected: (selected) {
+            if (selected) {
+              setState(() {
+                statusesToFilter = <OrderStatusEnum>{};
+                _updateVisibleOrders();
+              });
+            }
+          },
+        ),
+        _buildStatusFilter(OrderStatusEnum.pending),
+        _buildStatusFilter(OrderStatusEnum.rejected),
+        _buildStatusFilter(OrderStatusEnum.accepted),
+        // _buildStatusFilter(OrderStatusEnum.completed),
+      ],
     );
   }
 
@@ -266,50 +274,47 @@ class CurrentOrdersState extends State<CurrentOrders> {
   }
 
   Widget _buildTypeFilters() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      child: Wrap(
-        spacing: 8.0,
-        children: [
-          Container(
-            margin: EdgeInsets.only(top: 16.0),
-            child: Text('type:'),
-          ),
-          ChoiceChip(
-            label: Text('all'),
-            selected: !showDeliveryOrders && !showPickupOrders,
-            onSelected: (selected) {
-              setState(() {
-                if (selected) {
-                  showDeliveryOrders = false;
-                  showPickupOrders = false;
-                  _updateVisibleOrders();
-                }
-              });
-            },
-          ),
-          ChoiceChip(
-            label: Text('delivery'),
-            selected: showDeliveryOrders,
-            onSelected: (selected) {
-              setState(() {
-                showDeliveryOrders = selected;
+    return Wrap(
+      spacing: 8.0,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 16.0),
+          child: Text('type:'),
+        ),
+        ChoiceChip(
+          label: Text('all'),
+          selected: !showDeliveryOrders && !showPickupOrders,
+          onSelected: (selected) {
+            setState(() {
+              if (selected) {
+                showDeliveryOrders = false;
+                showPickupOrders = false;
                 _updateVisibleOrders();
-              });
-            },
-          ),
-          ChoiceChip(
-            label: Text('pickup'),
-            selected: showPickupOrders,
-            onSelected: (selected) {
-              setState(() {
-                showPickupOrders = selected;
-                _updateVisibleOrders();
-              });
-            },
-          ),
-        ],
-      ),
+              }
+            });
+          },
+        ),
+        ChoiceChip(
+          label: Text('delivery'),
+          selected: showDeliveryOrders,
+          onSelected: (selected) {
+            setState(() {
+              showDeliveryOrders = selected;
+              _updateVisibleOrders();
+            });
+          },
+        ),
+        ChoiceChip(
+          label: Text('pickup'),
+          selected: showPickupOrders,
+          onSelected: (selected) {
+            setState(() {
+              showPickupOrders = selected;
+              _updateVisibleOrders();
+            });
+          },
+        ),
+      ],
     );
   }
 
