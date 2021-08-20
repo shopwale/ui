@@ -15,7 +15,7 @@ flutter run
 
 ## Development
 
-Use flutter from master release channel.
+Use flutter from stable release channel.
 
 ```sh
 flutter channel stable
