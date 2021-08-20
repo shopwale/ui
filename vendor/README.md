@@ -33,6 +33,10 @@ Run from `dev_main.dart` to run with dev (fake) services.
 flutter run -t lib/dev_main.dart
 ```
 
+## Release
+
+- Building & releasing Andriod app (https://flutter.dev/docs/deployment/android)
+
 ## New to Flutter?
 
 - [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
