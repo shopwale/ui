@@ -126,6 +126,11 @@ class OrderDetailsState extends State<OrderDetails> {
           children: [
             _buildLabelledData(
               context,
+              label: 'Order #',
+              data: widget.order.orderId.toString(),
+            ),
+            _buildLabelledData(
+              context,
               label: 'Date',
               data: formatter.format(widget.order.orderDate),
             ),
@@ -134,12 +139,11 @@ class OrderDetailsState extends State<OrderDetails> {
               label: 'Type',
               data: widget.order.isDelivery ? 'Delivery' : 'Pickup',
             ),
-            if (widget.order.isDelivery)
-              _buildLabelledData(
-                context,
-                label: 'Address',
-                data: '${widget.customer.address} ${widget.customer.pinCode}',
-              ),
+            _buildLabelledData(
+              context,
+              label: 'Address',
+              data: '${widget.customer.address} ${widget.customer.pinCode}',
+            ),
             _buildLabelledData(
               context,
               label: 'Status',

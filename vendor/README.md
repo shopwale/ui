@@ -15,7 +15,7 @@ flutter run
 
 ## Development
 
-Use flutter from master release channel.
+Use flutter from stable release channel.
 
 ```sh
 flutter channel stable
@@ -32,6 +32,10 @@ Run from `dev_main.dart` to run with dev (fake) services.
 ```sh
 flutter run -t lib/dev_main.dart
 ```
+
+## Release
+
+- Building & releasing Andriod app (https://flutter.dev/docs/deployment/android)
 
 ## New to Flutter?
 
