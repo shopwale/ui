@@ -57,7 +57,9 @@ class CurrentOrdersState extends State<CurrentOrders> {
   };
   List<Order> visibleOrders = [];
   Timer _timer;
-  int dropdownValue = 3;
+  // Filter orders in last N number of days.
+  int numberOfDays = 3;
+
   CurrentOrdersState(
     this.orderService,
     this.orderDetailsFactory,
@@ -75,7 +77,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
     );
   }
 
-  Future<void> _fetchOrdersAndUpdateState({int numberOfDays = 3}) async {
+  Future<void> _fetchOrdersAndUpdateState() async {
     orders = await orderService.getOrders(
       widget.serviceProviderId,
       fromDate: DateTime.now().subtract(Duration(days: numberOfDays)),
@@ -118,26 +120,20 @@ class CurrentOrdersState extends State<CurrentOrders> {
             _buildStatusFilters(),
             _buildTypeFilters(),
             DropdownButton(
-              value: dropdownValue,
-              items: [1, 2, 3, 5, 10, 15].map<DropdownMenuItem>((value) {
-                return DropdownMenuItem<int>(
-                  value: value,
-                  child: Text('last $value day(s)'),
-                );
-              })
-                  // .map(
-                  //   (e) => DropdownMenuItem(
-                  //     key: Key('$e'),
-                  //     value: e,
-                  //     child: Text('last $e day(s)'),
-                  //   ),
-                  // )
+              value: numberOfDays,
+              items: [1, 2, 3, 5, 10, 15]
+                  .map<DropdownMenuItem>(
+                    (value) => DropdownMenuItem<int>(
+                      value: value,
+                      child: Text('last $value day(s)'),
+                    ),
+                  )
                   .toList(),
-              onChanged: (newvalue) {
+              onChanged: (newValue) {
                 setState(() {
-                  dropdownValue = newvalue;
+                  numberOfDays = newValue;
                 });
-                _fetchOrdersAndUpdateState(numberOfDays: newvalue);
+                _fetchOrdersAndUpdateState();
               },
             ),
             Flexible(
