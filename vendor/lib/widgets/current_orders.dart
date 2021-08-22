@@ -47,7 +47,6 @@ class CurrentOrdersState extends State<CurrentOrders> {
   final OrderService orderService;
   final CustomerService customerService;
   final OrderDetailsFactory orderDetailsFactory;
-
   List<Order> orders;
   bool showDeliveryOrders = false;
   bool showPickupOrders = false;
@@ -57,7 +56,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
   };
   List<Order> visibleOrders = [];
   Timer _timer;
-
+  int dropdownValue = 3;
   CurrentOrdersState(
     this.orderService,
     this.orderDetailsFactory,
@@ -80,6 +79,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
       widget.serviceProviderId,
       fromDate: DateTime.now().subtract(Duration(days: numberOfDays)),
     );
+
     setState(() {
       _updateVisibleOrders();
     });
@@ -115,18 +115,26 @@ class CurrentOrdersState extends State<CurrentOrders> {
           _buildStatusFilters(),
           _buildTypeFilters(),
           DropdownButton(
-            value: 3,
-            items: [1, 2, 3, 5, 10, 15]
-                .map(
-                  (e) => DropdownMenuItem(
-                    key: Key('$e'),
-                    value: e,
-                    child: Text('last $e day(s)'),
-                  ),
-                )
+            value: dropdownValue,
+            items: [1, 2, 3, 5, 10, 15].map<DropdownMenuItem>((value) {
+              return DropdownMenuItem<int>(
+                value: value,
+                child: Text('last $value day(s)'),
+              );
+            })
+                // .map(
+                //   (e) => DropdownMenuItem(
+                //     key: Key('$e'),
+                //     value: e,
+                //     child: Text('last $e day(s)'),
+                //   ),
+                // )
                 .toList(),
-            onChanged: (value) {
-              _fetchOrdersAndUpdateState(numberOfDays: value);
+            onChanged: (newvalue) {
+              setState(() {
+                dropdownValue = newvalue;
+              });
+              _fetchOrdersAndUpdateState(numberOfDays: newvalue);
             },
           ),
           Flexible(
