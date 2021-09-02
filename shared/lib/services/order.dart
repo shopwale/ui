@@ -28,10 +28,11 @@ class OrderService {
 
     // http://localgenie.in:3001/getOrders?serviceProviderId=2&dateRange=custom~2021-02-10:2021-08-10
     final dbClient = DbClient('getOrders', serverPort: 3001);
+    final defaultToDate = DateTime.now().add(Duration(days: 1));
     final orders = await dbClient.get(queryParams: {
       'serviceProviderId': serviceProviderId.toString(),
       'dateRange': 'custom~${formatter.format(fromDate)}'
-          ':${formatter.format(toDate ?? DateTime.now())}',
+          ':${formatter.format(toDate ?? defaultToDate)}',
     });
 
     return orders.map<Order>((orderJson) => Order.fromJson(orderJson)).toList();
@@ -55,7 +56,10 @@ class OrderService {
     // payload: {"orderId":2,"orderStatus":"Pending"}
     final dbClient = DbClient('updateOrderStatus', serverPort: 3001);
     final response = await dbClient.post(body: update.toMap());
-    return OrderStatus.fromJson(response);
+    // if (response["updateOrderStatus"]["allowUpdate"] == 0) {
+    throw "Update not allowed.";
+    // }
+    // return OrderStatus.fromJson(response["updateOrderStatus"]);
   }
 
   Future<OrderStatus> placeOrder(Order order) async {

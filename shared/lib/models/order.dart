@@ -71,7 +71,8 @@ class Order {
 enum OrderStatusEnum {
   pending,
   accepted,
-  rejected,
+  rejected, // by service provider.
+  cancelled, // by customer.
   completed, // delivered or picked up.
   outToDeliver,
   readyToPick,

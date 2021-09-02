@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
+import 'package:shared/models/provider.dart';
 import 'package:shared/services/catalog.dart';
 import 'package:shared/services/notification.dart';
 import 'package:shared/services/order.dart';
@@ -75,22 +76,64 @@ class LoginState extends State<Login> {
                 onPressed: mobileNumber?.toString()?.length != 10
                     ? null
                     : () async {
-                        final provider = await providerService
-                            .getServiceProviderInfo(mobileNumber);
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) => Container(
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(0, 0, 0, 0.5),
+                            ),
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        );
 
-                        if (!provider.tokens.contains(fcmToken)) {
-                          notificationService.addProviderFcmToken(
-                              serviceProviderId: provider.id, token: fcmToken);
+                        Provider provider;
+                        List details;
+                        bool loggedIn = false;
+                        try {
+                          provider = await providerService
+                              .getServiceProviderInfo(mobileNumber);
+
+                          if (!provider.tokens.contains(fcmToken)) {
+                            notificationService.addProviderFcmToken(
+                              serviceProviderId: provider.id,
+                              token: fcmToken,
+                            );
+                          }
+
+                          details = await Future.wait([
+                            orderService.getOrders(
+                              provider.id,
+                              fromDate: DateTime.now().subtract(
+                                Duration(days: 3),
+                              ),
+                            ),
+                            catalogService.byProviderId(provider.id),
+                          ]);
+
+                          loggedIn = true;
+                        } catch (_) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              duration: Duration(minutes: 1),
+                              content: Text(
+                                'Error logging in. '
+                                'Please check your number and try again.',
+                                softWrap: true,
+                              ),
+                              action: SnackBarAction(
+                                label: 'Ok',
+                                onPressed: () {},
+                              ),
+                            ),
+                          );
+                        } finally {
+                          Navigator.of(context).pop();
                         }
 
-                        final details = await Future.wait([
-                          orderService.getOrders(
-                            provider.id,
-                            fromDate:
-                                DateTime.now().subtract(Duration(days: 3)),
-                          ),
-                          catalogService.byProviderId(provider.id),
-                        ]);
+                        if (!loggedIn) return;
 
                         Navigator.of(context).push(
                           MaterialPageRoute(

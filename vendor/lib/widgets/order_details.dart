@@ -189,15 +189,28 @@ class OrderDetailsState extends State<OrderDetails> {
       child: FlatButton(
         color: Theme.of(context).accentColor,
         onPressed: () async {
-          final updatedOrderStatus = await orderService.updateOrderStatus(
-            OrderStatus(
-              orderId: widget.order.orderId,
-              status: orderStatusEnum,
-            ),
-          );
-          setState(() {
-            widget.order.orderStatus = updatedOrderStatus.status;
-          });
+          try {
+            final updatedOrderStatus = await orderService.updateOrderStatus(
+              OrderStatus(
+                orderId: widget.order.orderId,
+                status: orderStatusEnum,
+              ),
+            );
+            setState(() {
+              widget.order.orderStatus = updatedOrderStatus.status;
+            });
+          } catch (error) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                duration: Duration(minutes: 1),
+                content: Text('$error'),
+                action: SnackBarAction(
+                  label: 'Ok',
+                  onPressed: () {},
+                ),
+              ),
+            );
+          }
         },
         child: Text(
           capitalize(orderStatusEnum.asActionString()),
