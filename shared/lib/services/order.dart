@@ -56,10 +56,11 @@ class OrderService {
     // payload: {"orderId":2,"orderStatus":"Pending"}
     final dbClient = DbClient('updateOrderStatus', serverPort: 3001);
     final response = await dbClient.post(body: update.toMap());
-    // if (response["updateOrderStatus"]["allowUpdate"] == 0) {
-    throw "Update not allowed.";
-    // }
-    // return OrderStatus.fromJson(response["updateOrderStatus"]);
+    if (response["updateOrderStatus"]["allowUpdate"] == 0) {
+      throw "Current order status may be different. "
+          "Please refresh and try again later.";
+    }
+    return OrderStatus.fromJson(response["updateOrderStatus"]);
   }
 
   Future<OrderStatus> placeOrder(Order order) async {

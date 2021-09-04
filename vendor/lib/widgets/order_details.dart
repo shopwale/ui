@@ -203,7 +203,7 @@ class OrderDetailsState extends State<OrderDetails> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 duration: Duration(minutes: 1),
-                content: Text('$error'),
+                content: Text('$error', softWrap: true),
                 action: SnackBarAction(
                   label: 'Ok',
                   onPressed: () {},
