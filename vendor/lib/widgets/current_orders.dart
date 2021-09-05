@@ -9,8 +9,11 @@ import 'package:shared/services/customer.dart';
 import 'package:shared/services/order.dart';
 import 'package:strings/strings.dart';
 import 'package:vendor/common/constants.dart';
+import 'package:vendor/widgets/loading_overlay.dart';
 import 'package:vendor/widgets/order_details.dart';
 import 'package:intl/intl.dart';
+
+import 'error_snack_bar.dart';
 
 @injectable
 class CurrentOrdersFactory {
@@ -139,11 +142,27 @@ class CurrentOrdersState extends State<CurrentOrders> {
             Flexible(
               child: RefreshIndicator(
                 onRefresh: _fetchOrdersAndUpdateState,
-                child: ListView(
-                  children: visibleOrders
-                      .map((order) => _orderTile(order, context))
-                      .toList(),
-                ),
+                child: visibleOrders.isEmpty
+                    ? Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Icon(Icons.warning),
+                            Container(width: 8, height: 0),
+                            Text(
+                              'No orders. Please check filters.',
+                              style: TextStyle(fontSize: 16),
+                              softWrap: true,
+                              maxLines: 2,
+                            ),
+                          ],
+                        ),
+                      )
+                    : ListView(
+                        children: visibleOrders
+                            .map((order) => _orderTile(order, context))
+                            .toList(),
+                      ),
               ),
             ),
           ],
@@ -190,10 +209,19 @@ class CurrentOrdersState extends State<CurrentOrders> {
   }
 
   Future _openOrderDetails(Order order, BuildContext context) async {
-    final details = await Future.wait([
-      orderService.getOrderDetails(order.orderId),
-      customerService.getCustomerById(order.customerId),
-    ]);
+    showLoadingOverlay(context);
+
+    List details;
+    try {
+      details = await Future.wait([
+        orderService.getOrderDetails(order.orderId),
+        customerService.getCustomerById(order.customerId),
+      ]);
+    } catch (error) {
+      showError(context, 'Error fetching order details.');
+    } finally {
+      Navigator.of(context).pop();
+    }
 
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -261,7 +289,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
 
   ChoiceChip _buildStatusFilter(OrderStatusEnum status) {
     return ChoiceChip(
-      label: Text(status.asString()),
+      label: Text(status.asShortString()),
       selected: statusesToFilter.contains(status),
       onSelected: (selected) {
         setState(() {

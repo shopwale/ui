@@ -9,6 +9,7 @@ import 'package:shared/models/order.dart';
 import 'package:shared/models/catalog.dart';
 import 'package:shared/services/customer.dart';
 import 'package:shared/services/order.dart';
+import 'package:vendor/widgets/loading_overlay.dart';
 
 @injectable
 class OrderDetailsFactory {
@@ -165,7 +166,9 @@ class OrderDetailsState extends State<OrderDetails> {
                     widget.order.isDelivery)
                   _buildUpdateStatusButton(
                       context, OrderStatusEnum.outToDeliver),
-                if (widget.order.orderStatus == OrderStatusEnum.accepted &&
+                if (widget.order.orderStatus == OrderStatusEnum.accepted)
+                  _buildUpdateStatusButton(context, OrderStatusEnum.inProgress),
+                if (widget.order.orderStatus == OrderStatusEnum.inProgress &&
                     !widget.order.isDelivery)
                   _buildUpdateStatusButton(
                       context, OrderStatusEnum.readyToPick),
@@ -189,6 +192,7 @@ class OrderDetailsState extends State<OrderDetails> {
       child: FlatButton(
         color: Theme.of(context).accentColor,
         onPressed: () async {
+          showLoadingOverlay(context);
           try {
             final updatedOrderStatus = await orderService.updateOrderStatus(
               OrderStatus(
@@ -210,6 +214,8 @@ class OrderDetailsState extends State<OrderDetails> {
                 ),
               ),
             );
+          } finally {
+            Navigator.of(context).pop();
           }
         },
         child: Text(

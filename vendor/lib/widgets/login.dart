@@ -10,6 +10,9 @@ import 'package:shared/services/order.dart';
 import 'package:shared/services/provider.dart';
 import 'package:vendor/widgets/current_orders.dart';
 
+import 'error_snack_bar.dart';
+import 'loading_overlay.dart';
+
 @injectable
 class Login extends StatefulWidget {
   const Login();
@@ -76,18 +79,7 @@ class LoginState extends State<Login> {
                 onPressed: mobileNumber?.toString()?.length != 10
                     ? null
                     : () async {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (_) => Container(
-                            decoration: BoxDecoration(
-                              color: Color.fromRGBO(0, 0, 0, 0.5),
-                            ),
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
-                        );
+                        showLoadingOverlay(context);
 
                         Provider provider;
                         List details;
@@ -115,19 +107,10 @@ class LoginState extends State<Login> {
 
                           loggedIn = true;
                         } catch (_) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              duration: Duration(minutes: 1),
-                              content: Text(
-                                'Error logging in. '
-                                'Please check your number and try again.',
-                                softWrap: true,
-                              ),
-                              action: SnackBarAction(
-                                label: 'Ok',
-                                onPressed: () {},
-                              ),
-                            ),
+                          showError(
+                            context,
+                            'Error logging in. '
+                            'Please check your number and try again.',
                           );
                         } finally {
                           Navigator.of(context).pop();

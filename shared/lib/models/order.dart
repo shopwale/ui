@@ -73,15 +73,27 @@ enum OrderStatusEnum {
   accepted,
   rejected, // by service provider.
   cancelled, // by customer.
+  inProgress,
   completed, // delivered or picked up.
   outToDeliver,
   readyToPick,
 }
 
 extension OrderStatusEnumExtension on OrderStatusEnum {
-  String asString() {
+  String asShortString() {
     return describeEnum(this)
         .replaceAllMapped(RegExp("([A-Z])"), (m) => ' ${m[0].toLowerCase()}');
+  }
+
+  String asString() {
+    switch (this) {
+      case OrderStatusEnum.cancelled:
+        return 'Cancelled by customer';
+      case OrderStatusEnum.rejected:
+        return 'Cancelled by us';
+      default:
+        return asShortString();
+    }
   }
 
   String asActionString() {
@@ -98,9 +110,13 @@ extension OrderStatusEnumExtension on OrderStatusEnum {
         return 'Out to deliver';
       case OrderStatusEnum.readyToPick:
         return 'Ready to pick';
-      default:
-        throw 'Invalid Status';
+      case OrderStatusEnum.cancelled:
+        throw 'Invalid status';
+      case OrderStatusEnum.inProgress:
+        return 'In progress';
     }
+
+    return null;
   }
 }
 
