@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared/models/provider.dart';
@@ -9,6 +12,7 @@ import 'package:shared/services/notification.dart';
 import 'package:shared/services/order.dart';
 import 'package:shared/services/provider.dart';
 import 'package:vendor/widgets/current_orders.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'error_snack_bar.dart';
 import 'loading_overlay.dart';
@@ -29,6 +33,7 @@ class LoginState extends State<Login> {
   final CurrentOrdersFactory currentOrdersFactory;
   final NotificationService notificationService;
   final _firebaseMessaging = FirebaseMessaging.instance;
+  final Future<SharedPreferences> preferences;
   int mobileNumber;
   String fcmToken;
 
@@ -38,7 +43,7 @@ class LoginState extends State<Login> {
     this.currentOrdersFactory,
     this.catalogService,
     this.notificationService,
-  ) {
+  ) : preferences = SharedPreferences.getInstance() {
     FirebaseMessaging.onMessage.listen(print);
 
     _firebaseMessaging.getToken().then((String token) {
@@ -46,6 +51,14 @@ class LoginState extends State<Login> {
       fcmToken = token;
       print('Push Messaging token: $token');
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    preferences.then((prefs) => setState(() {
+          mobileNumber = prefs.getInt(mobileNumberPrefsKey);
+        }));
   }
 
   @override
@@ -61,6 +74,8 @@ class LoginState extends State<Login> {
               SizedBox(
                 width: 250,
                 child: TextField(
+                  controller: TextEditingController()
+                    ..value = TextEditingValue(text: mobileNumber?.toString()),
                   decoration:
                       InputDecoration(labelText: "Enter your mobile number"),
                   keyboardType: TextInputType.number,
@@ -88,6 +103,10 @@ class LoginState extends State<Login> {
                           provider = await providerService
                               .getServiceProviderInfo(mobileNumber);
 
+                          preferences.then((prefs) {
+                            prefs.setInt(mobileNumberPrefsKey, mobileNumber);
+                          });
+
                           if (!provider.tokens.contains(fcmToken)) {
                             notificationService.addProviderFcmToken(
                               serviceProviderId: provider.id,
@@ -106,7 +125,8 @@ class LoginState extends State<Login> {
                           ]);
 
                           loggedIn = true;
-                        } catch (_) {
+                        } catch (error) {
+                          log(error);
                           showError(
                             context,
                             'Error logging in. '
@@ -135,4 +155,6 @@ class LoginState extends State<Login> {
           ),
         ));
   }
+
+  String get mobileNumberPrefsKey => 'mobileNumber';
 }
