@@ -33,9 +33,15 @@ Run from `dev_main.dart` to run with dev (fake) services.
 flutter run -t lib/dev_main.dart
 ```
 
+## Generating launcher icons
+
+```sh
+flutter pub run flutter_launcher_icons:main
+```
+
 ## Release
 
-- Building & releasing Andriod app (https://flutter.dev/docs/deployment/android)
+- Building & releasing Andriod app (<https://flutter.dev/docs/deployment/android>)
 
 ## New to Flutter?
 
