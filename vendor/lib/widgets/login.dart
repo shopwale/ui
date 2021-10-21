@@ -75,8 +75,12 @@ class LoginState extends State<Login> {
                 width: 250,
                 child: TextField(
                   controller: TextEditingController()
-                    ..value =
-                        TextEditingValue(text: mobileNumber?.toString() ?? ''),
+                    ..value = TextEditingValue(
+                      text: mobileNumber?.toString() ?? '',
+                      selection: new TextSelection.collapsed(
+                        offset: mobileNumber?.toString()?.length ?? 0 - 1,
+                      ),
+                    ),
                   decoration:
                       InputDecoration(labelText: "Enter your mobile number"),
                   keyboardType: TextInputType.number,
