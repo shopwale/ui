@@ -57,11 +57,15 @@ class CurrentOrdersState extends State<CurrentOrders> {
   Set<OrderStatusEnum> statusesToFilter = {
     OrderStatusEnum.pending,
     OrderStatusEnum.accepted,
+    OrderStatusEnum.inProgress,
+    OrderStatusEnum.outToDeliver,
+    OrderStatusEnum.readyToPick,
   };
   List<Order> visibleOrders = [];
   Timer _timer;
   // Filter orders in last N number of days.
   int numberOfDays = 3;
+  bool showFilters = false;
 
   CurrentOrdersState(
     this.orderService,
@@ -120,25 +124,45 @@ class CurrentOrdersState extends State<CurrentOrders> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 8.0),
-            _buildStatusFilters(),
-            _buildTypeFilters(),
-            DropdownButton(
-              value: numberOfDays,
-              items: [1, 2, 3, 5, 10, 15]
-                  .map<DropdownMenuItem>(
-                    (value) => DropdownMenuItem<int>(
-                      value: value,
-                      child: Text('last $value day(s)'),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (newValue) {
+            ExpansionPanelList(
+              expansionCallback: (_, isExpanded) {
                 setState(() {
-                  numberOfDays = newValue;
+                  showFilters = !isExpanded;
                 });
-                _fetchOrdersAndUpdateState();
               },
+              children: [
+                ExpansionPanel(
+                  isExpanded: showFilters,
+                  headerBuilder: (_, __) => ListTile(
+                    title: Text(
+                      'Filters',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                    ),
+                  ),
+                  body: Padding(
+                    padding: EdgeInsets.only(bottom: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildStatusFilters(),
+                        _buildTypeFilters(),
+                        _buildNumberOfDaysFilter(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
+            SizedBox(height: 16.0),
+            Visibility(
+              visible: !showFilters, // hidden as info would be redundant.
+              child: Text(
+                'Orders from last $numberOfDays day(s)',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            SizedBox(height: 8.0),
             Flexible(
               child: RefreshIndicator(
                 onRefresh: _fetchOrdersAndUpdateState,
@@ -168,6 +192,26 @@ class CurrentOrdersState extends State<CurrentOrders> {
           ],
         ),
       ),
+    );
+  }
+
+  DropdownButton<dynamic> _buildNumberOfDaysFilter() {
+    return DropdownButton(
+      value: numberOfDays,
+      items: [1, 2, 3, 5, 10, 15]
+          .map<DropdownMenuItem>(
+            (value) => DropdownMenuItem<int>(
+              value: value,
+              child: Text('last $value day(s)'),
+            ),
+          )
+          .toList(),
+      onChanged: (newValue) {
+        setState(() {
+          numberOfDays = newValue;
+        });
+        _fetchOrdersAndUpdateState();
+      },
     );
   }
 
@@ -265,7 +309,10 @@ class CurrentOrdersState extends State<CurrentOrders> {
       children: [
         Container(
           margin: EdgeInsets.only(top: 16.0),
-          child: Text('status:'),
+          child: Text(
+            'Status',
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          ),
         ),
         ChoiceChip(
           label: Text('all'),
@@ -279,17 +326,14 @@ class CurrentOrdersState extends State<CurrentOrders> {
             }
           },
         ),
-        _buildStatusFilter(OrderStatusEnum.pending),
-        _buildStatusFilter(OrderStatusEnum.rejected),
-        _buildStatusFilter(OrderStatusEnum.accepted),
-        // _buildStatusFilter(OrderStatusEnum.completed),
+        ...OrderStatusEnum.values.map(_buildStatusFilter).toList(),
       ],
     );
   }
 
   ChoiceChip _buildStatusFilter(OrderStatusEnum status) {
     return ChoiceChip(
-      label: Text(status.asShortString()),
+      label: Text(status.asString()),
       selected: statusesToFilter.contains(status),
       onSelected: (selected) {
         setState(() {
@@ -311,7 +355,10 @@ class CurrentOrdersState extends State<CurrentOrders> {
       children: [
         Container(
           margin: EdgeInsets.only(top: 16.0),
-          child: Text('type:'),
+          child: Text(
+            'Type',
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          ),
         ),
         ChoiceChip(
           label: Text('all'),

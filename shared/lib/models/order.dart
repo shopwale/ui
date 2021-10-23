@@ -88,9 +88,9 @@ extension OrderStatusEnumExtension on OrderStatusEnum {
   String asString() {
     switch (this) {
       case OrderStatusEnum.cancelled:
-        return 'Cancelled by customer';
+        return 'cancelled by customer';
       case OrderStatusEnum.rejected:
-        return 'Cancelled by us';
+        return 'cancelled by us';
       default:
         return asShortString();
     }
