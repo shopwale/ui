@@ -134,10 +134,17 @@ class CurrentOrdersState extends State<CurrentOrders> {
                 ExpansionPanel(
                   isExpanded: showFilters,
                   headerBuilder: (_, __) => ListTile(
-                    title: Text(
-                      'Filters',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                    title: Row(
+                      children: [
+                        Icon(Icons.filter),
+                        Text(
+                          'Filters',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   body: Padding(
