@@ -131,7 +131,7 @@ class LoginState extends State<Login> {
 
                           loggedIn = true;
                         } catch (error) {
-                          log(error);
+                          log('$error');
                           showError(
                             context,
                             'Error logging in. '
