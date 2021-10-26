@@ -79,20 +79,30 @@ class CurrentOrdersState extends State<CurrentOrders> {
     _fetchOrdersAndUpdateState();
 
     _timer = Timer.periodic(
-      Duration(minutes: 1),
-      (_) => _fetchOrdersAndUpdateState(),
+      Duration(minutes: 2),
+      (_) => _fetchOrdersAndUpdateState(shouldShowLoadingOverlay: false),
     );
   }
 
-  Future<void> _fetchOrdersAndUpdateState() async {
-    orders = await orderService.getOrders(
-      widget.serviceProviderId,
-      fromDate: DateTime.now().subtract(Duration(days: numberOfDays)),
-    );
+  Future<void> _fetchOrdersAndUpdateState({
+    bool shouldShowLoadingOverlay = true,
+  }) async {
+    showLoadingOverlay(context);
 
-    setState(() {
-      _updateVisibleOrders();
-    });
+    try {
+      orders = await orderService.getOrders(
+        widget.serviceProviderId,
+        fromDate: DateTime.now().subtract(Duration(days: numberOfDays)),
+      );
+
+      setState(() {
+        _updateVisibleOrders();
+      });
+    } catch (error) {
+      showError(context, 'Error fetching order details.');
+    } finally {
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -115,7 +125,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
             Icons.refresh,
             color: Theme.of(context).accentTextTheme.subtitle1.color,
           ),
-          onPressed: () => _refreshOrders(context),
+          onPressed: _fetchOrdersAndUpdateState,
         ),
       ),
       body: Padding(
@@ -136,7 +146,8 @@ class CurrentOrdersState extends State<CurrentOrders> {
                   headerBuilder: (_, __) => ListTile(
                     title: Row(
                       children: [
-                        Icon(Icons.filter),
+                        Icon(Icons.filter_list),
+                        SizedBox(width: 8),
                         Text(
                           'Filters',
                           style: TextStyle(
@@ -178,7 +189,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
                         padding: EdgeInsets.all(16),
                         child: Row(
                           children: [
-                            Icon(Icons.warning),
+                            Icon(Icons.warning_amber_rounded),
                             Container(width: 8, height: 0),
                             Text(
                               'No orders. Please check filters.',
@@ -293,21 +304,6 @@ class CurrentOrdersState extends State<CurrentOrders> {
           ? Theme.of(context).accentColor
           : Theme.of(context).accentColor.withOpacity(0.5),
     );
-  }
-
-  Future<void> _refreshOrders(BuildContext context) async {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => Center(
-          child: RefreshProgressIndicator(key: Key('LoadingOverlay')),
-        ),
-      ),
-    );
-    try {
-      await _fetchOrdersAndUpdateState();
-    } finally {
-      Navigator.of(context).pop();
-    }
   }
 
   Widget _buildStatusFilters() {
