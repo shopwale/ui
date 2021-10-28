@@ -64,7 +64,7 @@ class LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Get Started')),
+        appBar: AppBar(title: Text('Local Genie Business')),
         body: Container(
           width: double.infinity,
           alignment: Alignment.center,
