@@ -89,8 +89,8 @@ class OrderDetailsState extends State<OrderDetails> {
             (element) => element.id == itemOrder.item.id,
             orElse: () => CatalogItem(
               id: 1,
-              name: 'Onion',
-              subCategoryName: 'Veggies',
+              name: 'Unknown',
+              subCategoryName: 'Unknown',
             ),
           );
 
