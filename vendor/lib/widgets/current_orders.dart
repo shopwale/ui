@@ -54,16 +54,11 @@ class CurrentOrdersState extends State<CurrentOrders> {
   List<Order> orders;
   bool showDeliveryOrders = false;
   bool showPickupOrders = false;
-  Set<OrderStatusEnum> statusesToFilter = {
-    OrderStatusEnum.pending,
-    OrderStatusEnum.accepted,
-    OrderStatusEnum.outToDeliver,
-    OrderStatusEnum.readyToPick,
-  };
+  Set<OrderStatusEnum> statusesToFilter = {};
   List<Order> visibleOrders = [];
   Timer _timer;
   // Filter orders in last N number of days.
-  int numberOfDays = 3;
+  int numberOfDays = 1;
   bool showFilters = false;
 
   CurrentOrdersState(
