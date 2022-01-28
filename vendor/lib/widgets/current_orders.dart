@@ -210,7 +210,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
   DropdownButton<dynamic> _buildNumberOfDaysFilter() {
     return DropdownButton(
       value: numberOfDays,
-      items: [1, 2, 3, 5, 10, 15]
+      items: [1, 2, 3, 5, 10, 15, 30, 90]
           .map<DropdownMenuItem>(
             (value) => DropdownMenuItem<int>(
               value: value,
@@ -248,7 +248,6 @@ class CurrentOrdersState extends State<CurrentOrders> {
                   Text('Status   ${capitalize(order.orderStatus.asString())}'),
                 ],
               ),
-              trailing: Text('$rupeeSymbol ${order.totalPrice}'),
             ),
           ],
         ),
