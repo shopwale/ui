@@ -57,7 +57,6 @@ class CurrentOrdersState extends State<CurrentOrders> {
   Set<OrderStatusEnum> statusesToFilter = {
     OrderStatusEnum.pending,
     OrderStatusEnum.accepted,
-    OrderStatusEnum.inProgress,
     OrderStatusEnum.outToDeliver,
     OrderStatusEnum.readyToPick,
   };

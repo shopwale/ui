@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
@@ -86,13 +88,15 @@ class OrderDetailsState extends State<OrderDetails> {
         key: Key('ItemOrdersList'),
         children: widget.itemOrders.map((itemOrder) {
           final catalogItem = widget.catalogItems.firstWhere(
-            (element) => element.id == itemOrder.item.id,
-            orElse: () => CatalogItem(
+              (element) => element.id == itemOrder.item.id, orElse: () {
+            log('Could not find ${itemOrder.item} in catalog by id.' +
+                ' Returning default.');
+            return CatalogItem(
               id: 1,
               name: 'Unknown',
               subCategoryName: 'Unknown',
-            ),
-          );
+            );
+          });
 
           return Padding(
             key: Key(itemOrder.item.id.toString()),
@@ -163,8 +167,6 @@ class OrderDetailsState extends State<OrderDetails> {
                 if (widget.order.orderStatus == OrderStatusEnum.pending)
                   _buildUpdateStatusButton(context, OrderStatusEnum.rejected),
                 if (widget.order.orderStatus == OrderStatusEnum.accepted)
-                  _buildUpdateStatusButton(context, OrderStatusEnum.inProgress),
-                if (widget.order.orderStatus == OrderStatusEnum.inProgress)
                   _buildUpdateStatusButton(
                     context,
                     widget.order.isDelivery
