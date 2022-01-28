@@ -73,7 +73,7 @@ enum OrderStatusEnum {
   accepted,
   rejected, // by service provider.
   cancelled, // by customer.
-  inProgress,
+  inProgress, // TODO: Delete once no data reference exists.
   completed, // delivered or picked up.
   outToDeliver,
   readyToPick,
