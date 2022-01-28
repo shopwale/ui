@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared/models/provider.dart';
@@ -153,7 +152,7 @@ class LoginState extends State<Login> {
                         );
                       },
                 child: Text('Log In'),
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).colorScheme.secondary,
                 textColor: Colors.white,
               ),
             ],

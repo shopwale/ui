@@ -8,7 +8,6 @@ import 'package:shared/models/order.dart';
 import 'package:shared/services/customer.dart';
 import 'package:shared/services/order.dart';
 import 'package:strings/strings.dart';
-import 'package:vendor/common/constants.dart';
 import 'package:vendor/widgets/loading_overlay.dart';
 import 'package:vendor/widgets/order_details.dart';
 import 'package:intl/intl.dart';
@@ -111,9 +110,8 @@ class CurrentOrdersState extends State<CurrentOrders> {
       appBar: AppBar(title: Text('Your Orders')),
       floatingActionButton: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: Theme.of(context).accentColor,
-        ),
+            borderRadius: BorderRadius.circular(30),
+            color: Theme.of(context).colorScheme.secondary),
         child: IconButton(
           icon: Icon(
             Icons.refresh,
@@ -294,8 +292,8 @@ class CurrentOrdersState extends State<CurrentOrders> {
     return Icon(
       o.isDelivery ? Icons.delivery_dining : Icons.shopping_bag,
       color: o.isDelivery
-          ? Theme.of(context).accentColor
-          : Theme.of(context).accentColor.withOpacity(0.5),
+          ? Theme.of(context).colorScheme.secondary
+          : Theme.of(context).colorScheme.secondary.withOpacity(0.5),
     );
   }
 
