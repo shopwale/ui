@@ -68,9 +68,9 @@ class CurrentOrdersState extends State<CurrentOrders> {
   );
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _fetchOrdersAndUpdateState();
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, _fetchOrdersAndUpdateState);
 
     _timer = Timer.periodic(
       Duration(minutes: 2),

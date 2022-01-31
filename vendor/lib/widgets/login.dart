@@ -104,7 +104,7 @@ class LoginState extends State<Login> {
                         bool loggedIn = false;
                         try {
                           provider = await providerService
-                              .getServiceProviderInfo(mobileNumber);
+                              .getServiceProviderInfo(mobileNumber!);
 
                           preferences.then((prefs) {
                             prefs.setInt(mobileNumberPrefsKey, mobileNumber!);

@@ -227,7 +227,7 @@ class OrderDetailsState extends State<OrderDetails> {
           }
         },
         child: Text(
-          capitalize(orderStatusEnum.asActionString()),
+          capitalize(orderStatusEnum.asActionString() ?? ""),
           style: TextStyle(
             color: Colors.white,
           ),

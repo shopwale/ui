@@ -17,7 +17,7 @@ class Customer {
 
   Customer.fromJson(Map<String, dynamic> json)
       : this(
-          id: json['customerId'],
+          id: json['customerId'] ?? json['customerID'],
           mobileNumber: json['mobileNumber'],
           customerName: json['customerName'],
           pinCode: json['pinCode'],
