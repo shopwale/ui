@@ -191,7 +191,7 @@ class OrderDetailsState extends State<OrderDetails> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 4.0),
       child: FlatButton(
-        color: Theme.of(context).accentColor,
+        color: Theme.of(context).colorScheme.secondary,
         onPressed: () async {
           showLoadingOverlay(context);
           try {

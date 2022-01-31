@@ -44,6 +44,7 @@ dependencies:
   shared:
     path: ../shared/
   shared_preferences: ^0.5.7+3
+  url_launcher: ^6.0.18
 
 dev_dependencies:
   flutter_test:

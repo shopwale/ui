@@ -11,6 +11,7 @@ import 'package:strings/strings.dart';
 import 'package:vendor/widgets/loading_overlay.dart';
 import 'package:vendor/widgets/order_details.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'error_snack_bar.dart';
 
@@ -67,8 +68,8 @@ class CurrentOrdersState extends State<CurrentOrders> {
   );
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _fetchOrdersAndUpdateState();
 
     _timer = Timer.periodic(
@@ -246,12 +247,21 @@ class CurrentOrdersState extends State<CurrentOrders> {
                   Text('Status   ${capitalize(order.orderStatus.asString())}'),
                 ],
               ),
+              trailing: _callButton(order.customerId),
             ),
           ],
         ),
       ),
     );
   }
+
+  IconButton _callButton(int customerId) => IconButton(
+      icon: Icon(Icons.phone_callback),
+      onPressed: () async {
+        final mobileNumber =
+            (await customerService.getCustomerById(customerId)).mobileNumber;
+        launch("tel://$mobileNumber");
+      });
 
   Container _orderDate(DateFormat formatter, Order order) {
     return Container(
