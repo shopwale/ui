@@ -1,10 +1,9 @@
-import 'package:meta/meta.dart';
 import 'package:shared/services/db.dart';
 
 class NotificationService {
   Future<void> addProviderFcmToken({
-    @required int serviceProviderId,
-    @required String token,
+    required int serviceProviderId,
+    required String token,
   }) async {
     final dbClient = DbClient('addFcmToken', serverPort: 3001);
     // {"serviceProviderId":1,"fcmToken":"dfdsfd"}
@@ -13,8 +12,8 @@ class NotificationService {
   }
 
   Future<void> addCustomerFcmToken({
-    @required int customerId,
-    @required String token,
+    required int customerId,
+    required String token,
   }) async {
     final dbClient = DbClient('addFcmToken');
     // {"serviceProviderId":1,"fcmToken":"dfdsfd"}
@@ -25,8 +24,9 @@ class NotificationService {
 class FakeNotificationService implements NotificationService {
   @override
   Future<void> addProviderFcmToken(
-      {int serviceProviderId, String token}) async {}
+      {required int serviceProviderId, required String token}) async {}
 
   @override
-  Future<void> addCustomerFcmToken({int customerId, String token}) async {}
+  Future<void> addCustomerFcmToken(
+      {required int customerId, required String token}) async {}
 }

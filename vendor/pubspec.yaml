@@ -18,7 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.2+11
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -31,10 +31,10 @@ dependencies:
   http: ^0.12.2
 
   firebase_core:
-  firebase_messaging: ^10.0.4
+  firebase_messaging: ^11.2.6
 
   # Dependency injection
-  injectable: <=1.1.2
+  injectable: ^1.5.3
   get_it:
 
   intl:
@@ -43,7 +43,7 @@ dependencies:
 
   shared:
     path: ../shared/
-  shared_preferences: ^0.5.7+3
+  shared_preferences: ^2.0.12
   url_launcher: ^6.0.18
 
 dev_dependencies:

@@ -9,7 +9,6 @@ import 'package:vendor/common/constants.dart';
 import 'package:shared/models/customer.dart';
 import 'package:shared/models/order.dart';
 import 'package:shared/models/catalog.dart';
-import 'package:shared/services/customer.dart';
 import 'package:shared/services/order.dart';
 import 'package:vendor/widgets/loading_overlay.dart';
 
@@ -18,11 +17,11 @@ class OrderDetailsFactory {
   const OrderDetailsFactory();
 
   OrderDetails create({
-    Key key,
-    @required List<ItemOrder> itemOrders,
-    @required Order order,
-    @required Customer customer,
-    @required List<CatalogItem> catalogItems,
+    Key? key,
+    required List<ItemOrder> itemOrders,
+    required Order order,
+    required Customer customer,
+    required List<CatalogItem> catalogItems,
   }) =>
       OrderDetails(
         GetIt.instance<OrderDetailsState>(),
@@ -42,11 +41,11 @@ class OrderDetails extends StatefulWidget {
 
   OrderDetails(
     this.orderDetailsState, {
-    Key key,
-    @required this.itemOrders,
-    @required this.order,
-    @required this.customer,
-    @required this.catalogItems,
+    Key? key,
+    required this.itemOrders,
+    required this.order,
+    required this.customer,
+    required this.catalogItems,
   }) : super(key: key);
 
   @override
@@ -56,12 +55,17 @@ class OrderDetails extends StatefulWidget {
 @injectable
 class OrderDetailsState extends State<OrderDetails> {
   final OrderService orderService;
-  final CustomerService customerService;
 
-  OrderDetailsState(this.orderService, this.customerService);
+  // For items whose price is unknown, we set them to zero. We show total price
+  // only if all items have non-zero price.
+  bool get shouldShowTotalPrice =>
+      widget.itemOrders.every((itemOrder) => itemOrder.item.price != 0.0);
+
+  OrderDetailsState(this.orderService);
 
   @override
   Widget build(BuildContext context) {
+    log('${widget.itemOrders}');
     return Scaffold(
       appBar: AppBar(
         title: Text('Order by ${widget.order.customerName}'),
@@ -88,15 +92,17 @@ class OrderDetailsState extends State<OrderDetails> {
         key: Key('ItemOrdersList'),
         children: widget.itemOrders.map((itemOrder) {
           final catalogItem = widget.catalogItems.firstWhere(
-              (element) => element.id == itemOrder.item.id, orElse: () {
-            log('Could not find ${itemOrder.item} in catalog by id.' +
-                ' Returning default.');
-            return CatalogItem(
-              id: 1,
-              name: 'Unknown',
-              subCategoryName: 'Unknown',
-            );
-          });
+            (element) => element.id == itemOrder.item.id,
+            orElse: () {
+              log('Could not find ${itemOrder.item} in catalog by id.' +
+                  ' Returning default.');
+              return CatalogItem(
+                id: 1,
+                name: 'Unknown',
+                subCategoryName: 'Unknown',
+              );
+            },
+          );
 
           return Padding(
             key: Key(itemOrder.item.id.toString()),
@@ -154,11 +160,12 @@ class OrderDetailsState extends State<OrderDetails> {
               label: 'Status',
               data: capitalize(widget.order.orderStatus.asString()),
             ),
-            _buildLabelledData(
-              context,
-              label: 'Total',
-              data: '$rupeeSymbol ${widget.order.totalPrice}',
-            ),
+            if (shouldShowTotalPrice)
+              _buildLabelledData(
+                context,
+                label: 'Total',
+                data: '$rupeeSymbol ${widget.order.totalPrice}',
+              ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -231,8 +238,8 @@ class OrderDetailsState extends State<OrderDetails> {
 
   Widget _buildLabelledData(
     BuildContext context, {
-    @required String label,
-    @required String data,
+    required String label,
+    required String data,
   }) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0),
@@ -245,7 +252,7 @@ class OrderDetailsState extends State<OrderDetails> {
               data,
               softWrap: true,
               style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headline6.fontSize,
+                fontSize: Theme.of(context).textTheme.headline6?.fontSize,
               ),
             ),
           ),
@@ -256,8 +263,8 @@ class OrderDetailsState extends State<OrderDetails> {
 
   SizedBox _buildLabel(BuildContext context, String data) {
     final labelTextStyle = TextStyle(
-      color: Theme.of(context).textTheme.headline6.color.withOpacity(0.7),
-      fontSize: Theme.of(context).textTheme.headline6.fontSize,
+      color: Theme.of(context).textTheme.headline6?.color?.withOpacity(0.7),
+      fontSize: Theme.of(context).textTheme.headline6?.fontSize,
     );
 
     return SizedBox(

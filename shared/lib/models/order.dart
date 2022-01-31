@@ -5,7 +5,7 @@ import 'package:shared/models/catalog.dart';
 class Order {
   /// Map from item id to item orders.
   final Map<CatalogItem, ItemOrder> itemOrders = {};
-  final int serviceProviderId;
+  final int? serviceProviderId;
   final int orderId;
   final DateTime orderDate;
   OrderStatusEnum orderStatus;
@@ -15,14 +15,14 @@ class Order {
   double totalPrice;
 
   Order({
-    this.orderId,
-    this.orderDate,
-    this.orderStatus,
-    this.customerName,
-    this.customerId,
+    required this.orderId,
+    required this.orderDate,
+    required this.orderStatus,
+    required this.customerName,
+    required this.customerId,
     this.isDelivery = true,
     this.serviceProviderId,
-    this.totalPrice,
+    required this.totalPrice,
   });
 
   Order.fromJson(Map<String, dynamic> json)
@@ -42,7 +42,7 @@ class Order {
       return newOrder;
     }
 
-    final existingItemOrder = itemOrders[newOrder.item];
+    final existingItemOrder = itemOrders[newOrder.item]!;
     final updatedItemOrder = ItemOrder(
       item: newOrder.item,
       quantity: existingItemOrder.quantity + newOrder.quantity,
@@ -82,7 +82,7 @@ enum OrderStatusEnum {
 extension OrderStatusEnumExtension on OrderStatusEnum {
   String asShortString() {
     return describeEnum(this)
-        .replaceAllMapped(RegExp("([A-Z])"), (m) => ' ${m[0].toLowerCase()}');
+        .replaceAllMapped(RegExp("([A-Z])"), (m) => ' ${m[0]?.toLowerCase()}');
   }
 
   String asString() {
@@ -96,7 +96,7 @@ extension OrderStatusEnumExtension on OrderStatusEnum {
     }
   }
 
-  String asActionString() {
+  String? asActionString() {
     switch (this) {
       case OrderStatusEnum.pending:
         return 'Pending';
@@ -115,8 +115,6 @@ extension OrderStatusEnumExtension on OrderStatusEnum {
       case OrderStatusEnum.inProgress:
         return 'In progress';
     }
-
-    return null;
   }
 }
 
@@ -133,9 +131,9 @@ class ItemOrder {
   final CatalogItem item;
 
   ItemOrder({
-    @required this.item,
-    int quantity,
-  }) : _quantity = quantity ?? 0;
+    required this.item,
+    int quantity = 0,
+  }) : _quantity = quantity;
 
   int get quantity => _quantity;
 
@@ -166,7 +164,7 @@ class OrderStatus {
   final int orderId;
   final OrderStatusEnum status;
 
-  OrderStatus({@required this.orderId, @required this.status});
+  OrderStatus({required this.orderId, required this.status});
 
   static OrderStatus fromJson(Map<String, dynamic> json) => OrderStatus(
         orderId: json['orderId'],

@@ -33,8 +33,8 @@ class LoginState extends State<Login> {
   final NotificationService notificationService;
   final _firebaseMessaging = FirebaseMessaging.instance;
   final Future<SharedPreferences> preferences;
-  int mobileNumber;
-  String fcmToken;
+  int? mobileNumber;
+  late String fcmToken;
 
   LoginState(
     this.providerService,
@@ -45,9 +45,8 @@ class LoginState extends State<Login> {
   ) : preferences = SharedPreferences.getInstance() {
     FirebaseMessaging.onMessage.listen(print);
 
-    _firebaseMessaging.getToken().then((String token) {
-      assert(token != null);
-      fcmToken = token;
+    _firebaseMessaging.getToken().then((String? token) {
+      fcmToken = token!;
       print('Push Messaging token: $token');
     });
   }
@@ -95,20 +94,20 @@ class LoginState extends State<Login> {
               ),
               SizedBox(height: 16.0),
               FlatButton(
-                onPressed: mobileNumber?.toString()?.length != 10
+                onPressed: mobileNumber?.toString().length != 10
                     ? null
                     : () async {
                         showLoadingOverlay(context);
 
-                        Provider provider;
-                        List details;
+                        Provider? provider;
+                        List details = [];
                         bool loggedIn = false;
                         try {
                           provider = await providerService
                               .getServiceProviderInfo(mobileNumber);
 
                           preferences.then((prefs) {
-                            prefs.setInt(mobileNumberPrefsKey, mobileNumber);
+                            prefs.setInt(mobileNumberPrefsKey, mobileNumber!);
                           });
 
                           if (!provider.tokens.contains(fcmToken)) {
@@ -141,11 +140,12 @@ class LoginState extends State<Login> {
                         }
 
                         if (!loggedIn) return;
+                        if (provider == null) return;
 
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => currentOrdersFactory.create(
-                              serviceProviderId: provider.id,
+                              serviceProviderId: provider!.id,
                               catalogItems: details[1],
                             ),
                           ),

@@ -11,7 +11,7 @@ class DbClient {
     serverPort = 3000,
   }) : _serviceEndpoint = Uri.https('$_serverHost:$serverPort', servicePath);
 
-  Future<dynamic> get({Map<String, dynamic> queryParams}) async {
+  Future<dynamic> get({Map<String, dynamic> queryParams = const {}}) async {
     final requestUri = _serviceEndpoint.replace(queryParameters: queryParams);
     log('requestUri($requestUri)');
     final response = await http.get(requestUri);

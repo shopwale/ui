@@ -1,25 +1,23 @@
-import 'package:meta/meta.dart';
-
 class CatalogItem {
-  final String name;
+  final String? name;
   final int id;
   final Unit unitOfMeasure;
-  final int categoryId;
-  final String categoryName;
-  final int subCategoryId;
-  final String subCategoryName;
+  final int? categoryId;
+  final String? categoryName;
+  final int? subCategoryId;
+  final String? subCategoryName;
   final double price;
   final List<String> tags;
 
   CatalogItem({
     this.name,
-    @required this.id,
+    required this.id,
     this.unitOfMeasure = Unit.pieces,
     this.categoryId,
     this.categoryName,
     this.subCategoryId,
     this.subCategoryName,
-    this.price,
+    this.price = 0,
     this.tags = const [],
   });
 

@@ -20,8 +20,8 @@ class CurrentOrdersFactory {
   const CurrentOrdersFactory();
 
   CurrentOrders create({
-    @required int serviceProviderId,
-    @required List<CatalogItem> catalogItems,
+    required int serviceProviderId,
+    required List<CatalogItem> catalogItems,
   }) =>
       CurrentOrders(
         GetIt.instance<CurrentOrdersState>(),
@@ -37,9 +37,9 @@ class CurrentOrders extends StatefulWidget {
 
   CurrentOrders(
     this.state, {
-    Key key,
-    @required this.serviceProviderId,
-    @required this.catalogItems,
+    Key? key,
+    required this.serviceProviderId,
+    required this.catalogItems,
   }) : super(key: key);
 
   @override
@@ -51,12 +51,12 @@ class CurrentOrdersState extends State<CurrentOrders> {
   final OrderService orderService;
   final CustomerService customerService;
   final OrderDetailsFactory orderDetailsFactory;
-  List<Order> orders;
+  List<Order> orders = [];
   bool showDeliveryOrders = false;
   bool showPickupOrders = false;
   Set<OrderStatusEnum> statusesToFilter = {};
   List<Order> visibleOrders = [];
-  Timer _timer;
+  late Timer _timer;
   // Filter orders in last N number of days.
   int numberOfDays = 1;
   bool showFilters = false;
@@ -116,7 +116,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
         child: IconButton(
           icon: Icon(
             Icons.refresh,
-            color: Theme.of(context).accentTextTheme.subtitle1.color,
+            color: Theme.of(context).accentTextTheme.subtitle1?.color,
           ),
           onPressed: _fetchOrdersAndUpdateState,
         ),
@@ -274,7 +274,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
   Future _openOrderDetails(Order order, BuildContext context) async {
     showLoadingOverlay(context);
 
-    List details;
+    List details = [];
     try {
       details = await Future.wait([
         orderService.getOrderDetails(order.orderId),

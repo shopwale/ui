@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 class Customer {
   final int id;
   final int mobileNumber;
@@ -9,11 +7,11 @@ class Customer {
   final List<String> tokens;
 
   Customer({
-    @required this.id,
-    @required this.mobileNumber,
-    @required this.customerName,
-    @required this.pinCode,
-    @required this.address,
+    required this.id,
+    required this.mobileNumber,
+    required this.customerName,
+    required this.pinCode,
+    required this.address,
     this.tokens = const [],
   });
 

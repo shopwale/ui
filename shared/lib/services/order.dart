@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:meta/meta.dart';
 import 'package:shared/models/catalog.dart';
 import 'package:shared/models/order.dart';
 import 'package:shared/services/db.dart';
@@ -21,8 +20,8 @@ class OrderService {
 
   Future<List<Order>> getOrders(
     int serviceProviderId, {
-    @required DateTime fromDate,
-    DateTime toDate,
+    required DateTime fromDate,
+    DateTime? toDate,
   }) async {
     final DateFormat formatter = DateFormat('yyyy-M-d');
 
@@ -81,8 +80,8 @@ class FakeOrderService implements OrderService {
   @override
   Future<List<Order>> getOrders(
     int serviceProviderId, {
-    @required DateTime fromDate,
-    DateTime toDate,
+    required DateTime fromDate,
+    DateTime? toDate,
   }) =>
       Future.value(
         List.generate(
@@ -98,6 +97,7 @@ class FakeOrderService implements OrderService {
         orderStatus: OrderStatusEnum.values[_rnd.nextInt(4)],
         isDelivery: _rnd.nextBool(),
         customerName: 'Vimal K',
+        totalPrice: _rnd.nextDouble(),
       );
 
   @override

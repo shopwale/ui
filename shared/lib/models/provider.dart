@@ -1,17 +1,15 @@
-import 'package:meta/meta.dart';
-
 /// Details about a service provider.
 class Provider {
   final int id;
   final String name;
-  final int mobileNumber;
-  final int pinCode;
-  final String address;
+  final int? mobileNumber;
+  final int? pinCode;
+  final String? address;
   final List<String> tokens;
 
   Provider({
-    @required this.id,
-    @required this.name,
+    required this.id,
+    required this.name,
     this.mobileNumber,
     this.pinCode,
     this.address,
