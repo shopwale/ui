@@ -260,7 +260,7 @@ class CurrentOrdersState extends State<CurrentOrders> {
       onPressed: () async {
         final mobileNumber =
             (await customerService.getCustomerById(customerId)).mobileNumber;
-        launch("tel://$mobileNumber");
+        launch("tel://+$mobileNumber");
       });
 
   Container _orderDate(DateFormat formatter, Order order) {
