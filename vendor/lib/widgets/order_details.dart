@@ -109,6 +109,9 @@ class OrderDetailsState extends State<OrderDetails> {
             padding: EdgeInsets.all(8.0),
             child: Row(
               children: [
+                if (catalogItem.iconUrl != null)
+                  Image.network(catalogItem.iconUrl.toString(), width: 40),
+                SizedBox(width: 8),
                 SizedBox(
                   width: 40,
                   child: Text(itemOrder.quantity.toString()),
@@ -118,7 +121,10 @@ class OrderDetailsState extends State<OrderDetails> {
                   child: Text(catalogItem.unitOfMeasure.asString()),
                 ),
                 SizedBox(width: 32.0),
-                Text('${catalogItem.subCategoryName} - ${catalogItem.name}'),
+                Text(
+                  '${catalogItem.subCategoryName} - ${catalogItem.name}',
+                  softWrap: true,
+                ),
               ],
             ),
           );

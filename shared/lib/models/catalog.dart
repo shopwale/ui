@@ -8,6 +8,7 @@ class CatalogItem {
   final String? subCategoryName;
   final double price;
   final List<String> tags;
+  final Uri? iconUrl;
 
   CatalogItem({
     this.name,
@@ -19,6 +20,7 @@ class CatalogItem {
     this.subCategoryName,
     this.price = 0,
     this.tags = const [],
+    this.iconUrl,
   });
 
   CatalogItem.fromJson(Map<String, dynamic> json)
@@ -32,6 +34,9 @@ class CatalogItem {
           price: (json['price'] as int).toDouble(),
           unitOfMeasure: asUnit(json['unitOfMeasure']),
           tags: json['tags'] ?? [],
+          iconUrl: json['itemIconURL'] == null
+              ? null
+              : Uri.parse(json['itemIconURL']),
         );
 }
 
