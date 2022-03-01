@@ -59,7 +59,10 @@ class OrderService {
       throw "Current order status may be different. "
           "Please refresh and try again later.";
     }
-    return OrderStatus.fromJson(response["updateOrderStatus"]);
+    return OrderStatus.fromJson({
+      ...update.toMap(),
+      ...response["updateOrderStatus"],
+    });
   }
 
   Future<OrderStatus> placeOrder(Order order) async {

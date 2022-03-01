@@ -76,7 +76,7 @@ class LoginState extends State<Login> {
                     ..value = TextEditingValue(
                       text: mobileNumber?.toString() ?? '',
                       selection: new TextSelection.collapsed(
-                        offset: mobileNumber?.toString()?.length ?? 0 - 1,
+                        offset: mobileNumber?.toString().length ?? 0 - 1,
                       ),
                     ),
                   decoration:
